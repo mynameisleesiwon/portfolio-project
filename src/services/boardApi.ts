@@ -10,6 +10,7 @@ import {
 const board_api = axios.create({
   baseURL:
     'https://my-json-server.typicode.com/mynameisleesiwon/portfolio-project',
+  maxContentLength: 100000,
   headers: {
     'Content-Type': 'application/json',
   },
