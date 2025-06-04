@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
-import { label } from 'framer-motion/client';
 import { MenuIcon, XIcon } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 const Navbar = () => {

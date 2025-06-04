@@ -8,7 +8,8 @@ import {
 
 // axios 인스턴스 생성
 const board_api = axios.create({
-  baseURL: 'http://192.168.35.81:3001',
+  baseURL:
+    'https://my-json-server.typicode.com/mynameisleesiwon/portfolio-project',
   headers: {
     'Content-Type': 'application/json',
   },

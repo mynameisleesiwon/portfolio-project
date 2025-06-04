@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Book, DatabaseIcon } from 'lucide-react';
+import { Book } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import type { DemoCardType } from '../types';
 import DemoCardSection from '../components/TechDemo/DemoCardSection';

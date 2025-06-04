@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Post } from '../../types';
 import { boardApi } from '../../services/boardApi';
 

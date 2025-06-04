@@ -1,4 +1,3 @@
-import React from 'react';
 import ProfileSection from '../components/Home/ProfileSection';
 import InfoSection from '../components/Home/InfoSection';
 import CareerSection from '../components/Home/CareerSection';
