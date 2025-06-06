@@ -10,7 +10,7 @@
 
 ## 🌐 **Live Demo**
 
-**🔗 [포트폴리오 사이트 바로가기](https://your-site-name.netlify.app)**
+**🔗 [포트폴리오 사이트 바로가기](https://siwonsportfolio.netlify.app)**
 
 <br>
 
