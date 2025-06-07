@@ -8,10 +8,10 @@ import { SiGithub } from 'react-icons/si';
 const techTags = [
   'React',
   'TypeScript',
-  'JSON Server',
-  'Axios',
   'Tailwind CSS',
   'Framer Motion',
+  'Axios',
+  'JSON Server',
 ];
 
 const BoardDemo = () => {

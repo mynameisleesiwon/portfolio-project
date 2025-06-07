@@ -14,6 +14,11 @@
   --color-border: #e3e7de;
   --color-card: #ffffff;
 
+  /* 스켈레톤 UI 전용 색상 */
+  --color-skeleton-bg: #d1d5db; /* 스켈레톤 기본 배경 */
+  --color-skeleton-accent: #9ca3af; /* 스켈레톤 강조 요소 */
+  --color-skeleton-border: #e5e7eb; /* 스켈레톤 테두리 */
+
   /* 호버 색상 (라이트 모드) */
   --color-text-muted: #6a7456;
   --color-primary-hover: #4d8344;
@@ -27,7 +32,7 @@
     sans-serif;
 }
 
-/* 다크 모드 테마 정의  */
+/* 다크 모드 테마 정의 */
 .dark {
   --color-bg: #121212;
   --color-text: #e0e0e0;
@@ -36,6 +41,11 @@
   --color-accent: #d1a87c;
   --color-border: #2a2a2a;
   --color-card: #1c1c1c;
+
+  /* 다크모드 스켈레톤 색상 */
+  --color-skeleton-bg: #374151; /* 다크모드 스켈레톤 배경 */
+  --color-skeleton-accent: #6b7280; /* 다크모드 스켈레톤 강조 */
+  --color-skeleton-border: #2d3748; /* 다크모드 스켈레톤 테두리 */
 
   /* 호버 색상 (다크 모드) */
   --color-text-muted: #a0a0a0;

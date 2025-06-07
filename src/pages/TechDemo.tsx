@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Book } from 'lucide-react';
+import { Book, Play } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import type { DemoCardType } from '../types';
 import DemoCardSection from '../components/TechDemo/DemoCardSection';
@@ -33,6 +33,31 @@ const TechDemo = () => {
         '반응형 디자인',
       ],
       route: '/tech-demo/board',
+    },
+    {
+      id: 'slider',
+      title: '슬라이더 컴포넌트',
+      description:
+        'Swiper.js 기반 인터랙티브 슬라이더 (외부 API + 스켈레톤 UI)',
+      detailDescription:
+        'Swiper.js를 활용하여 부드럽고 반응형인 슬라이더 컴포넌트를 구현했습니다. 외부 API(TMDB) 연동을 통해 실시간 데이터를 처리하며, 커스텀 훅으로 데이터 관리 로직을 분리하여 재사용성을 높였습니다. 로딩 상태에서는 스켈레톤 UI를 제공하고, 터치 제스처를 지원하여 접근성까지 고려한 완성도 높은 슬라이더를 구현했습니다.',
+      icon: <Play className="w-8 h-8" />,
+      status: 'active',
+      techStack: [
+        'React',
+        'TypeScript',
+        'Tailwind CSS',
+        'Swiper.js',
+        'TMDB API',
+      ],
+      features: [
+        'Swiper.js 라이브러리 활용',
+        '외부 API 데이터 연동',
+        '스켈레톤 UI 구현',
+        '커스텀 훅 데이터 분리',
+        '반응형 브레이크포인트',
+      ],
+      route: '/tech-demo/slider',
     },
   ];
 
