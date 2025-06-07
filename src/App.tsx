@@ -38,6 +38,7 @@ function App() {
             <Route path="/tech-demo/board/:id" element={<BoardDetail />} />
             {/* 슬라이더 */}
             <Route path="/tech-demo/slider" element={<SliderDemo />} />
+            {/* 404페이지 */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>
