@@ -78,10 +78,10 @@ const TechDemo = () => {
         transition={{ duration: 0.6 }}
       >
         <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-          프론트엔드 기능 모음
+          웹 개발 기능 모음
         </h1>
         <p className="text-lg md:text-xl text-text/70 max-w-4xl mx-auto leading-relaxed">
-          실무에 필요한 핵심 프론트엔드 기능을 직접 구현해보았습니다.
+          실무에 필요한 핵심 웹 개발 기능을 직접 구현해보았습니다.
           <br />
           React, TypeScript, Tailwind CSS를 활용하여 사용자 경험을 고려한
           인터랙티브한 기능들을 <br />
