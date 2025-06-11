@@ -3,6 +3,7 @@ import { Book } from 'lucide-react';
 import BoardList from '../../../components/TechDemo/Board/BoardList';
 import { Link } from 'react-router-dom';
 import { SiGithub } from 'react-icons/si';
+import { useEffect } from 'react';
 
 // 기술 태그
 const techTags = [
@@ -15,6 +16,10 @@ const techTags = [
 ];
 
 const BoardDemo = () => {
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
   return (
     <div className="max-w-screen-lg mx-auto w-full px-2 py-6 ">
       {/* 페이지 헤더 */}

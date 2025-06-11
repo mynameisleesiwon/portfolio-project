@@ -3,6 +3,7 @@ import { Play } from 'lucide-react';
 import { SiGithub } from 'react-icons/si';
 import { Link } from 'react-router-dom';
 import Slider from '../../../components/TechDemo/Slider/Slider';
+import { useEffect } from 'react';
 
 // 기술 태그
 const techTags = [
@@ -16,6 +17,10 @@ const techTags = [
 ];
 
 const SliderDemo = () => {
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
   return (
     <div className="max-w-screen-lg mx-auto w-full px-2 py-6">
       <motion.div
