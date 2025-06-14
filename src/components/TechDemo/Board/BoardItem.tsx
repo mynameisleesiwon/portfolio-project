@@ -51,7 +51,7 @@ const BoardItem: React.FC<BoardItemProps> = ({ post }) => {
 
   // 새 게시글 표시 (24시간 이내)
   const isNew = () => {
-    const date = new Date(post.createdAt);
+    const date = new Date(post.createdAt.toDate().toISOString());
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffHours = diffMs / (1000 * 60 * 60);
@@ -104,7 +104,7 @@ const BoardItem: React.FC<BoardItemProps> = ({ post }) => {
           {/* 작성 시간 */}
           <div className="flex items-center">
             <Clock size={14} className="mr-1" />
-            <span>{koreanTimeAgo(post.createdAt)}</span>
+            <span>{koreanTimeAgo(post.createdAt.toDate().toISOString())}</span>
           </div>
         </div>
       </div>

@@ -9,7 +9,9 @@ const BoardDetail = () => {
   const location = useLocation();
 
   // 게시글 상세 정보 관리
-  const { post, error, refetch, deletePost } = usePostDetail(id || '');
+  const { post, error, refetch, deletePost, isLoading } = usePostDetail(
+    id || ''
+  );
 
   // 날짜 포맷팅 함수
   const formatDate = (dateString: string): string => {
@@ -38,9 +40,6 @@ const BoardDetail = () => {
   // 수정 페이지로 이동
   const handleEdit = () => {
     if (post) {
-      alert(
-        'my-json-server를 이용해 가짜 REST API를 만들었기 때문에 실제로 변경사항이 저장되지 않습니다.'
-      );
       const targetUrl = location.search
         ? `/tech-demo/board/edit/${post.id}/${location.search}`
         : `/tech-demo/board/edit/${post.id}`;
@@ -52,9 +51,6 @@ const BoardDetail = () => {
   // 게시글 삭제
   const handleDelete = async () => {
     if (!post) return;
-    alert(
-      'my-json-server를 이용해 가짜 REST API를 만들었기 때문에 실제로 변경사항이 저장되지 않습니다.'
-    );
 
     const isConfirmed = window.confirm(
       '게시글을 정말 삭제하시겠습니까?\n\n삭제된 게시글은 복구할 수 없습니다.'
@@ -116,7 +112,7 @@ const BoardDetail = () => {
             {/* 작성일 */}
             <div className="flex items-center">
               <Clock size={16} className="mr-2 text-primary" />
-              <span>{formatDate(post.createdAt)}</span>
+              <span>{formatDate(post.createdAt.toDate().toISOString())}</span>
             </div>
           </div>
         </div>
@@ -161,9 +157,10 @@ const BoardDetail = () => {
               {/* 삭제 버튼 */}
               <button
                 onClick={handleDelete}
-                className="inline-flex items-center px-4 py-2 text-text-muted hover:text-text border border-border rounded-lg hover:bg-card-hover transition-all duration-200 cursor-pointer"
+                disabled={isLoading}
+                className="inline-flex items-center px-4 py-2 text-text-muted hover:text-text border border-border rounded-lg hover:bg-card-hover transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                삭제
+                {isLoading ? '삭제 중...' : '삭제'}
               </button>
             </div>
           </div>

@@ -17,16 +17,16 @@ const TechDemo = () => {
     {
       id: 'board',
       title: '게시판',
-      description: 'RESTful API 기반 게시판 시스템 (CRUD, 검색, 필터링)',
+      description: 'Firebase 기반 게시판 시스템 (CRUD, 검색, 필터링)',
       detailDescription:
-        'React + TypeScript로 구현한 게시판 시스템입니다. JSON Server로 RESTful API를 구성하고, Axios를 통해 HTTP 통신을 처리했습니다. 커스텀 훅을 활용하여 컴포넌트와 데이터 관리 로직을 분리함으로써 깔끔한 아키텍처를 구현했으며, 게시글 CRUD부터 검색, 카테고리 필터링, 페이지네이션까지 실무에서 필요한 핵심 기능들을 완성했습니다.',
+        'React + TypeScript로 구현한 게시판 시스템입니다. Firebase Firestore를 통해 실시간 데이터베이스를 구성하고, 커스텀 훅을 활용하여 컴포넌트와 데이터 관리 로직을 분리함으로써 깔끔한 아키텍처를 구현했습니다. 게시글 CRUD부터 검색, 카테고리 필터링, 페이지네이션까지 실무에서 필요한 핵심 기능들을 완성했습니다.',
       icon: <Book className="w-8 h-8" />,
       status: 'active',
       techStack: [
         'React',
         'TypeScript',
-        'JSON Server',
-        'Axios',
+        'Firebase',
+        'Firestore',
         'Tailwind CSS',
         'Framer Motion',
       ],
