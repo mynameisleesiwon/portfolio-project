@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Book } from 'lucide-react';
 import BoardList from '../../../components/TechDemo/Board/BoardList';
 import { Link } from 'react-router-dom';
+import { SiGithub } from 'react-icons/si';
 
 // 기술 태그
 const techTags = [
@@ -47,6 +48,18 @@ const BoardDemo = () => {
               {tag}
             </span>
           ))}
+        </div>
+
+        <div className="mt-6">
+          <a
+            href="https://github.com/mynameisleesiwon/demo/blob/main/src/pages/demos/%08Board/BoardDemo.tsx"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors text-sm font-medium"
+          >
+            <SiGithub className="w-4 h-4" />
+            소스 코드 확인
+          </a>
         </div>
       </motion.div>
 

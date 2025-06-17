@@ -8,6 +8,7 @@ interface UsePostsReturn {
   totalPages: number;
 
   // 상태
+  isLoading: boolean;
   error: string | null;
 
   // 액션
@@ -18,11 +19,13 @@ export const usePosts = (urlParams: UrlSearchParams): UsePostsReturn => {
   // 상태 관리
   const [posts, setPosts] = useState<Post[]>([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // 데이터 가져오기 함수
   const fetchPosts = async () => {
     try {
+      setIsLoading(true);
       setError(null);
 
       // API 파라미터 생성
@@ -60,9 +63,11 @@ export const usePosts = (urlParams: UrlSearchParams): UsePostsReturn => {
       setTotalCount(result.totalCount);
     } catch (error) {
       setError('게시글을 불러오는데 실패했습니다.');
+
       setPosts([]);
       setTotalCount(0);
     } finally {
+      setIsLoading(false);
       window.scrollTo({ top: 0 });
     }
   };
@@ -87,6 +92,7 @@ export const usePosts = (urlParams: UrlSearchParams): UsePostsReturn => {
     totalPages,
 
     // 상태
+    isLoading,
     error,
 
     // 액션

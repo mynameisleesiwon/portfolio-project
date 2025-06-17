@@ -38,6 +38,9 @@ const BoardDetail = () => {
   // 수정 페이지로 이동
   const handleEdit = () => {
     if (post) {
+      alert(
+        'my-json-server를 이용해 가짜 REST API를 만들었기 때문에 실제로 변경사항이 저장되지 않습니다.'
+      );
       const targetUrl = location.search
         ? `/tech-demo/board/edit/${post.id}/${location.search}`
         : `/tech-demo/board/edit/${post.id}`;
@@ -49,6 +52,9 @@ const BoardDetail = () => {
   // 게시글 삭제
   const handleDelete = async () => {
     if (!post) return;
+    alert(
+      'my-json-server를 이용해 가짜 REST API를 만들었기 때문에 실제로 변경사항이 저장되지 않습니다.'
+    );
 
     const isConfirmed = window.confirm(
       '게시글을 정말 삭제하시겠습니까?\n\n삭제된 게시글은 복구할 수 없습니다.'

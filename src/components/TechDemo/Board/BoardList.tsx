@@ -8,6 +8,7 @@ import Pagination from '../../../common/components/Pagination';
 import { useUrlParams } from '../../../hooks/Board/userUrlParams';
 import { usePosts } from '../../../hooks/Board/usePosts';
 import { useCategories } from '../../../hooks/Board/useCategories';
+import LoadingSpinner from '../../../common/components/LoadingSpinner';
 
 const BoardList = () => {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const BoardList = () => {
   const {
     posts,
     totalPages,
+    isLoading: postsLoading,
     error: postsError,
     refetch: refetchPosts,
   } = usePosts(urlParams);
@@ -46,6 +48,9 @@ const BoardList = () => {
 
   // 새 글 작성 핸들러
   const handleCreatePost = () => {
+    alert(
+      'my-json-server를 이용해 가짜 REST API를 만들었기 때문에 실제로 변경사항이 저장되지 않습니다.'
+    );
     navigate('/tech-demo/board/create');
   };
 
@@ -81,12 +86,17 @@ const BoardList = () => {
 
         {/* 게시글 목록 */}
         <div className="border-t border-border bg-card rounded-lg overflow-hidden">
-          {posts.length > 0 ? (
+          {postsLoading ? (
+            // 로딩 상태 - 로딩 컴포넌트 표시
+            <LoadingSpinner text="게시글을 불러오고 있어요..." />
+          ) : posts.length > 0 ? (
+            // 데이터 있음 - 게시글 목록 표시
             posts.map((post: Post, index: number) => (
               <BoardItem key={post.id} post={post} index={index} />
             ))
           ) : (
-            <div className="py-12 text-center text-text-mute">
+            // 데이터 없음 - 빈 상태 표시
+            <div className="py-12 text-center text-text-muted">
               게시글이 없습니다.
             </div>
           )}
