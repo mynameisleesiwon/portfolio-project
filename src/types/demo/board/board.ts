@@ -1,17 +1,19 @@
+import { Timestamp } from 'firebase/firestore';
+
 // 게시글 타입 정의
 export interface Post {
-  id: number;
+  id: string;
   title: string;
   content: string;
   author: string;
-  createdAt: string;
+  createdAt: Timestamp;
   views: number;
   category: string;
 }
 
 // 카테고리 타입 정의
 export interface Category {
-  id: number;
+  id: string;
   name: string;
 }
 

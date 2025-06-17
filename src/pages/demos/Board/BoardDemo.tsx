@@ -11,8 +11,8 @@ const techTags = [
   'TypeScript',
   'Tailwind CSS',
   'Framer Motion',
-  'Axios',
-  'JSON Server',
+  'Firebase',
+  'Firestore',
 ];
 
 const BoardDemo = () => {
@@ -38,9 +38,9 @@ const BoardDemo = () => {
         <h1 className="text-3xl md:text-4xl font-bold mb-3 ">게시판</h1>
 
         <p className="text-text-muted mx-auto">
-          React + TypeScript와 JSON Server를 활용한 게시판 시스템입니다. <br />
-          Axios 기반 HTTP 통신과 커스텀 훅을 통해 CRUD, 검색, 카테고리 필터링,
-          페이지네이션 기능을 구현했습니다. <br />
+          React + TypeScript와 Firebase를 활용한 게시판 시스템입니다. <br />
+          Firestore를 통한 실시간 데이터베이스 연동과 커스텀 훅을 통해 CRUD,
+          검색, 카테고리 필터링, 페이지네이션 기능을 구현했습니다. <br />
           그리고 Tailwind CSS를 활용해 반응형 디자인을 구현했습니다.
         </p>
 

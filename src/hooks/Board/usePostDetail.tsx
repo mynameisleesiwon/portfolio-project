@@ -8,6 +8,7 @@ interface UsePostDetailReturn {
 
   // 상태
   error: string | null;
+  isLoading: boolean;
 
   // 액션
   refetch: () => void;
@@ -18,6 +19,7 @@ export const usePostDetail = (postId: string): UsePostDetailReturn => {
   // 상태관리
   const [post, setPost] = useState<Post | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // 게시글 데이터 가져오기 함수
   const fetchPost = async () => {
@@ -27,6 +29,7 @@ export const usePostDetail = (postId: string): UsePostDetailReturn => {
     }
 
     try {
+      setIsLoading(true);
       setError(null);
       // 게시글 조회
       const postData = await boardApi.getPost(postId);
@@ -38,6 +41,8 @@ export const usePostDetail = (postId: string): UsePostDetailReturn => {
           : '게시글을 불러오는데 실패했습니다.';
       setError(errorMessage);
       setPost(null);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -49,14 +54,16 @@ export const usePostDetail = (postId: string): UsePostDetailReturn => {
     }
 
     try {
+      setIsLoading(true);
       await boardApi.deletePost(String(post.id));
-
       return true;
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : '게시글 삭제에 실패했습니다.';
       setError(errorMessage);
       return false;
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -73,6 +80,7 @@ export const usePostDetail = (postId: string): UsePostDetailReturn => {
 
     // 상태
     error,
+    isLoading,
 
     // 액션
     refetch: fetchPost,

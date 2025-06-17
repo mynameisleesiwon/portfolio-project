@@ -48,9 +48,6 @@ const BoardList = () => {
 
   // 새 글 작성 핸들러
   const handleCreatePost = () => {
-    alert(
-      'my-json-server를 이용해 가짜 REST API를 만들었기 때문에 실제로 변경사항이 저장되지 않습니다.'
-    );
     navigate('/tech-demo/board/create');
   };
 
@@ -103,7 +100,7 @@ const BoardList = () => {
         </div>
 
         {/* 페이지네이션 */}
-        {totalPages > 1 && (
+        {!postsLoading && totalPages > 1 && (
           <Pagination
             currentPage={urlParams.page}
             totalPages={totalPages}

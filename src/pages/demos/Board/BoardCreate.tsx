@@ -11,7 +11,7 @@ const BoardCreate = () => {
   const { categories } = useCategories();
 
   // 게시글 작성 훅
-  const { createPost } = useCreatePost();
+  const { createPost, isLoading } = useCreatePost();
 
   // 폼 상태 관리
   const [formData, setFormData] = useState<PostCreateData>({
@@ -270,9 +270,10 @@ const BoardCreate = () => {
               {/* 저장 버튼 */}
               <button
                 type="submit"
-                className="inline-flex items-center cursor-pointer px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-all duration-200 "
+                disabled={isLoading}
+                className="inline-flex items-center justify-center cursor-pointer px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                등록
+                {isLoading ? '등록 중...' : '등록'}
               </button>
             </div>
           </div>
