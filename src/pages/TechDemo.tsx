@@ -1,0 +1,73 @@
+import { motion } from 'framer-motion';
+import { Book, DatabaseIcon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import type { DemoCardType } from '../types';
+import DemoCardSection from '../components/TechDemo/DemoCardSection';
+
+const TechDemo = () => {
+  const navigate = useNavigate();
+
+  // 데모 카드 데이터
+  const demoCards: DemoCardType[] = [
+    {
+      id: 'board',
+      title: '게시판',
+      description: 'RESTful API 기반 게시판 시스템 (CRUD, 검색, 필터링)',
+      detailDescription:
+        'React + TypeScript로 구현한 게시판 시스템입니다. JSON Server로 RESTful API를 구성하고, Axios를 통해 HTTP 통신을 처리했습니다. 커스텀 훅을 활용하여 컴포넌트와 데이터 관리 로직을 분리함으로써 깔끔한 아키텍처를 구현했으며, 게시글 CRUD부터 검색, 카테고리 필터링, 페이지네이션까지 실무에서 필요한 핵심 기능들을 완성했습니다.',
+      icon: <Book className="w-8 h-8" />,
+      status: 'active',
+      techStack: [
+        'React',
+        'TypeScript',
+        'JSON Server',
+        'Axios',
+        'Tailwind CSS',
+        'Framer Motion',
+      ],
+      features: [
+        '게시글 CRUD 기능',
+        '게시글 검색 기능',
+        '카테고리별 필터링',
+        '페이지네이션',
+        '반응형 디자인',
+      ],
+      route: '/tech-demo/board',
+    },
+  ];
+
+  // 카드 클릭 핸들러
+  const handleCardClick = (demo: DemoCardType) => {
+    if (demo.status === 'active') {
+      navigate(demo.route);
+    }
+  };
+
+  return (
+    <div className="max-w-screen-lg mx-auto w-full px-4 py-6 flex flex-col justify-center">
+      {/* 헤더 섹션 */}
+      <motion.div
+        className="text-center mb-16 mt-16 md:mt-0"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          프론트엔드 기능 모음
+        </h1>
+        <p className="text-lg md:text-xl text-text/70 max-w-4xl mx-auto leading-relaxed">
+          실무에 필요한 핵심 프론트엔드 기능을 직접 구현해보았습니다.
+          <br />
+          React, TypeScript, Tailwind CSS를 활용하여 사용자 경험을 고려한
+          인터랙티브한 기능들을 <br />
+          개발하고 지속적으로 개선하고 있습니다.
+        </p>
+      </motion.div>
+
+      {/* 데모 카드 섹션 */}
+      <DemoCardSection demos={demoCards} onCardClick={handleCardClick} />
+    </div>
+  );
+};
+
+export default TechDemo;

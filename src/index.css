@@ -1,0 +1,85 @@
+@import 'tailwindcss';
+
+/* 다크모드 변형 정의 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* 테마 설정 */
+@theme {
+  /* 기본 색상 (라이트 모드) */
+  --color-bg: #f8f9f6;
+  --color-text: #2c3424;
+  --color-primary: #3e6b37;
+  --color-secondary: #75996c;
+  --color-accent: #cbac88;
+  --color-border: #e3e7de;
+  --color-card: #ffffff;
+
+  /* 호버 색상 (라이트 모드) */
+  --color-text-muted: #6a7456;
+  --color-primary-hover: #4d8344;
+  --color-secondary-hover: #88b37e;
+  --color-accent-hover: #d8bea0;
+  --color-border-hover: #cad3c1;
+  --color-card-hover: #f0f5eb;
+
+  /* 폰트 설정 */
+  --font-family-sans: 'Pretendard Variable', 'Noto Sans KR', system-ui,
+    sans-serif;
+}
+
+/* 다크 모드 테마 정의  */
+.dark {
+  --color-bg: #121212;
+  --color-text: #e0e0e0;
+  --color-primary: #5b9c52;
+  --color-secondary: #85bb7c;
+  --color-accent: #d1a87c;
+  --color-border: #2a2a2a;
+  --color-card: #1c1c1c;
+
+  /* 호버 색상 (다크 모드) */
+  --color-text-muted: #a0a0a0;
+  --color-primary-hover: #6fb863;
+  --color-secondary-hover: #9fd194;
+  --color-accent-hover: #e5bf95;
+  --color-border-hover: #3d3d3d;
+  --color-card-hover: #262626;
+}
+
+/* 기본 스타일 설정 */
+@layer base {
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-family-sans);
+  }
+
+  a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+
+  a:hover {
+    color: var(--color-primary-hover);
+  }
+
+  /* 스크롤바 스타일링 */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-bg);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary-hover);
+  }
+}
