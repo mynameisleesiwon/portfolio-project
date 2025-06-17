@@ -10,6 +10,7 @@ import BoardCreate from './pages/demos/\bBoard/BoardCreate';
 import BoardEdit from './pages/demos/\bBoard/BoardEdit';
 import BoardDetail from './pages/demos/\bBoard/BoardDetail';
 import BoardDemo from './pages/demos/\bBoard/BoardDemo';
+import SliderDemo from './pages/demos/Slider/SliderDemo';
 
 function App() {
   const location = useLocation();
@@ -35,6 +36,8 @@ function App() {
             <Route path="/tech-demo/board/create" element={<BoardCreate />} />
             <Route path="/tech-demo/board/edit/:id" element={<BoardEdit />} />
             <Route path="/tech-demo/board/:id" element={<BoardDetail />} />
+            {/* 슬라이더 */}
+            <Route path="/tech-demo/slider" element={<SliderDemo />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>
