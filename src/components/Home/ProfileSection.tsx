@@ -36,7 +36,7 @@ const ProfileSection = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
           >
-            프론트 엔드
+            웹 개발자
           </motion.span>
           <motion.span
             className="block text-2xl md:text-3xl mt-1"

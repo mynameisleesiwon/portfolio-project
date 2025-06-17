@@ -9,7 +9,7 @@ const Footer = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          © 2025 이시원 | 프론트엔드 개발자 포트폴리오
+          © 2025 이시원 | 웹 개발자 포트폴리오
         </motion.div>
       </div>
     </footer>
