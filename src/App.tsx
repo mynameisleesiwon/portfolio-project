@@ -11,6 +11,7 @@ import BoardEdit from './pages/demos/\bBoard/BoardEdit';
 import BoardDetail from './pages/demos/\bBoard/BoardDetail';
 import BoardDemo from './pages/demos/\bBoard/BoardDemo';
 import SliderDemo from './pages/demos/Slider/SliderDemo';
+import SystemThemeDetector from './components/DarkMode/SystemThemeDetector';
 
 function App() {
   const location = useLocation();
@@ -20,6 +21,9 @@ function App() {
       className=" bg-bg text-text flex flex-col"
       style={{ minHeight: '100dvh' }}
     >
+      {/* 시스템 테마 감지 */}
+      <SystemThemeDetector />
+
       {/* 헤더 */}
       <Header />
 
