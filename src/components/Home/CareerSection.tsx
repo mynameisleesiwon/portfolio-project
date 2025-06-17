@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 
 const CareerSection = () => {
   const careers = [
+    { period: '2024.05 ~ 2024.08', name: '주식회사 웨이소프트' },
     { period: '2023.03 ~ 2023.12', name: '주식회사 나으리' },
     { period: '2022.10 ~ 2022.12', name: '(주)여보야 인턴' },
     { period: '2022.07 ~ 2022.09', name: '인공지능사관학교' },
