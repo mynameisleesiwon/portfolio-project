@@ -1,7 +1,5 @@
 import { motion } from 'framer-motion';
-import { ExternalLink, Github, Mail, MapPin, Phone } from 'lucide-react';
-import React from 'react';
-
+import { ExternalLink, Github, Mail, MapPin } from 'lucide-react';
 const InfoSection = () => {
   return (
     <motion.section

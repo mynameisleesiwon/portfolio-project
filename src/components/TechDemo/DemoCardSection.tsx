@@ -1,4 +1,3 @@
-import React from 'react';
 import type { DemoCardType } from '../../types';
 import { motion } from 'framer-motion';
 import DemoCard from './DemoCard';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { usePostDetail } from '../../../hooks/Board/usePostDetail';
 import ErrorMessage from '../../../common/components/ErrorMessage';

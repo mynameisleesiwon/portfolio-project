@@ -1,14 +1,14 @@
 import React from 'react';
 import type { Post } from '../../../types';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Clock, Eye, User } from 'lucide-react';
+import { Clock, User } from 'lucide-react';
 
 interface BoardItemProps {
   post: Post;
   index: number;
 }
 
-const BoardItem: React.FC<BoardItemProps> = ({ post, index }) => {
+const BoardItem: React.FC<BoardItemProps> = ({ post }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
