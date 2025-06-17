@@ -8,9 +8,7 @@ import {
 
 // axios 인스턴스 생성
 const board_api = axios.create({
-  baseURL:
-    'https://my-json-server.typicode.com/mynameisleesiwon/portfolio-project',
-  maxContentLength: 100000,
+  baseURL: 'https://my-json-server.typicode.com/mynameisleesiwon/demo',
   headers: {
     'Content-Type': 'application/json',
   },
