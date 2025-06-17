@@ -24,6 +24,7 @@ import type {
   Category,
 } from '../types';
 
+// Firestore 컬렉션 이름 상수
 const POSTS_COLLECTION = 'posts';
 const CATEGORIES_COLLECTION = 'categories';
 
@@ -33,9 +34,10 @@ export const boardApi = {
     params: PostSearchParams = {}
   ): Promise<{ data: Post[]; totalCount: number }> {
     try {
+      // 기본 쿼리 생성
       let postsQuery = query(collection(db, POSTS_COLLECTION));
 
-      // 카테고리 필터링
+      // 카테고리로 필터링
       if (params.category) {
         postsQuery = query(
           postsQuery,
@@ -43,8 +45,9 @@ export const boardApi = {
         );
       }
 
-      // 검색어 필터링
+      // 제목, 내용, 작성자로 검색
       if (params.title_like) {
+        // 문자열 범위 검색을 위한 쿼리
         postsQuery = query(
           postsQuery,
           where('title', '>=', params.title_like),
@@ -64,15 +67,15 @@ export const boardApi = {
         );
       }
 
-      // 정렬
+      // 생성일 기준 내림차순 정렬
       postsQuery = query(postsQuery, orderBy('createdAt', 'desc'));
 
-      // 페이지네이션
+      // 페이지네이션 처리
       const pageSize = params._limit || 10;
       const page = params._page || 1;
 
-      // 이전 페이지의 마지막 문서 스냅샷을 기준으로 startAfter 적용
       if (page > 1) {
+        // 이전 페이지의 마지막 문서를 기준으로 다음 페이지 조회
         const prevPageSnapshot = await getDocs(
           query(postsQuery, limit((page - 1) * pageSize))
         );
@@ -86,16 +89,17 @@ export const boardApi = {
         postsQuery = query(postsQuery, limit(pageSize));
       }
 
+      // 최종 쿼리 실행
       const querySnapshot = await getDocs(postsQuery);
       const posts = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       })) as Post[];
 
-      // 전체 개수 조회
+      // 전체 개수 조회를 위한 쿼리
       let totalQuery: Query<DocumentData> = collection(db, POSTS_COLLECTION);
 
-      // 카테고리 필터링
+      // 필터링 조건 적용
       if (params.category) {
         totalQuery = query(
           totalQuery,
@@ -103,7 +107,6 @@ export const boardApi = {
         );
       }
 
-      // 검색어 필터링
       if (params.title_like) {
         totalQuery = query(
           totalQuery,
@@ -153,12 +156,14 @@ export const boardApi = {
   // 게시글 작성
   async createPost(data: PostCreateData): Promise<Post> {
     try {
+      // 기본 필드 추가
       const newPost = {
         ...data,
         createdAt: Timestamp.now(),
         views: 0,
       };
 
+      // Firestore에 문서 추가
       const docRef = await addDoc(collection(db, POSTS_COLLECTION), newPost);
       const docSnap = await getDoc(docRef);
 
