@@ -2,7 +2,7 @@
 
 > **프론트엔드 개발자 포트폴리오 웹사이트**
 >
-> ![React](https://img.shields.io/badge/React-19.1.0-61DAFB?logo=react&logoColor=white) > ![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178C6?logo=typescript&logoColor=white) > ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.7-06B6D4?logo=tailwindcss&logoColor=white)
+> ![React](https://img.shields.io/badge/React-19.1.0-61DAFB?logo=react&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178C6?logo=typescript&logoColor=white) ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.7-06B6D4?logo=tailwindcss&logoColor=white)
 >
 > 모던 웹 기술로 구현한 인터랙티브 포트폴리오
 
