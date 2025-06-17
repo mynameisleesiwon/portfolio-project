@@ -3,9 +3,14 @@ import { Book, Play } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import type { DemoCardType } from '../types';
 import DemoCardSection from '../components/TechDemo/DemoCardSection';
+import { useEffect } from 'react';
 
 const TechDemo = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
 
   // 데모 카드 데이터
   const demoCards: DemoCardType[] = [
