@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 import DarkModeToggle from '../../components/DarkMode/DarkModeToggle';
-import { useNavigate } from 'react-router-dom';
+import AuthButton from './AuthButton';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -20,10 +21,11 @@ const Header = () => {
           transition={{ duration: 0.5 }}
           onClick={handleLogo}
         >
-          Siwon
+          SIWON
         </motion.div>
         <div className="flex items-center gap-4">
           <Navbar />
+          <AuthButton />
           <DarkModeToggle />
         </div>
       </div>

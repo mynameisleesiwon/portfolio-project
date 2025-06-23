@@ -12,20 +12,34 @@ import BoardDetail from './pages/demos/\bBoard/BoardDetail';
 import BoardDemo from './pages/demos/\bBoard/BoardDemo';
 import SliderDemo from './pages/demos/Slider/SliderDemo';
 import SystemThemeDetector from './components/DarkMode/SystemThemeDetector';
+import SignIn from './pages/auth/SignIn';
+import SignUp from './pages/auth/SignUp';
+import ProtectedRoute from './common/components/ProtectedRoute';
+import ProtectedTest from './pages/ProtectedTest';
+import ToastContainer from './common/components/ToastContainer';
+import { useToastStore } from './store/toastStore';
 
 function App() {
   const location = useLocation();
+
+  // Auth 페이지인지 확인 (로그인/회원가입 페이지)
+  const isAuthPage = location.pathname.startsWith('/auth');
+
+  const { toasts, removeToast } = useToastStore();
 
   return (
     <div
       className=" bg-bg text-text flex flex-col"
       style={{ minHeight: '100dvh' }}
     >
+      {/* 토스트 컨테이너 추가 */}
+      <ToastContainer toasts={toasts} onClose={removeToast} />
+
       {/* 시스템 테마 감지 */}
       <SystemThemeDetector />
 
-      {/* 헤더 */}
-      <Header />
+      {/* 헤더 - Auth 페이지가 아닐 때만 표시 */}
+      {!isAuthPage && <Header />}
 
       {/* 메인 */}
       <main className="container mx-auto flex-grow flex justify-center">
@@ -35,6 +49,18 @@ function App() {
             <Route path="/" element={<Home />} />
             {/* 기능 모음 */}
             <Route path="/tech-demo" element={<TechDemo />} />
+            {/* 인증 */}
+            <Route path="/auth/signin" element={<SignIn />} />
+            <Route path="/auth/signup" element={<SignUp />} />
+            {/* 보호된 페이지 */}
+            <Route
+              path="/protected-test"
+              element={
+                <ProtectedRoute>
+                  <ProtectedTest />
+                </ProtectedRoute>
+              }
+            />
             {/* 게시판 */}
             <Route path="/tech-demo/board" element={<BoardDemo />} />
             <Route path="/tech-demo/board/create" element={<BoardCreate />} />
@@ -48,8 +74,8 @@ function App() {
         </AnimatePresence>
       </main>
 
-      {/* 푸터 */}
-      <Footer />
+      {/* 푸터 - Auth 페이지가 아닐 때만 표시 */}
+      {!isAuthPage && <Footer />}
     </div>
   );
 }
