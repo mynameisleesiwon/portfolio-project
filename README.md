@@ -2,7 +2,9 @@
 
 > **웹 개발자 포트폴리오 웹사이트**
 >
-> ![React](https://img.shields.io/badge/React-19.1.0-61DAFB?logo=react&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178C6?logo=typescript&logoColor=white) ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.7-06B6D4?logo=tailwindcss&logoColor=white)
+> **Frontend:** ![React](https://img.shields.io/badge/React-19.1.0-61DAFB?logo=react&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178C6?logo=typescript&logoColor=white) ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.7-06B6D4?logo=tailwindcss&logoColor=white)
+>
+> **Backend:** ![NestJS](https://img.shields.io/badge/NestJS-11.0.1-E0234E?logo=nestjs&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791?logo=postgresql&logoColor=white)
 >
 > 모던 웹 기술로 구현한 인터랙티브 포트폴리오
 
@@ -29,6 +31,19 @@
 - **⚡ 매끄러운 애니메이션** - Framer Motion을 활용한 인터랙티브 UI
 - **🔍 실시간 검색 & 필터링** - 게시판 기능에서 즉시 검색 결과 제공
 - **🎨 일관된 디자인 시스템** - 브랜드 컬러와 컴포넌트 통일성
+- **🔧 RESTful API** - NestJS 기반의 안정적인 백엔드 API
+- **🗄️ 관계형 데이터베이스** - PostgreSQL을 활용한 데이터 관리
+
+<br>
+
+## 🏗️ **프로젝트 구조**
+
+```
+portfolio-project/
+├── frontend/          # React + TypeScript + Tailwind CSS + Firebase
+├── backend/           # NestJS + PostgreSQL
+└── shared/            # 공통 타입 정의
+```
 
 <br>
 
@@ -46,6 +61,8 @@
 - **검색 기능** - 제목, 내용, 작성자 기준 검색
 - **카테고리 필터링** - 카테고리 선택 및 필터링
 - **페이지네이션** - 성능 최적화를 위한 페이지 분할
+- **Firebase 연동** - 실시간 데이터베이스 및 인증 시스템
+- **실시간 업데이트** - Firebase Realtime Database 활용
 
 #### **▶️ 슬라이더 컴포넌트**
 
