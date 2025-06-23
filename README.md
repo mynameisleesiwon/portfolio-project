@@ -41,8 +41,7 @@
 ```
 portfolio-project/
 ├── frontend/          # React + TypeScript + Tailwind CSS + Firebase
-├── backend/           # NestJS + PostgreSQL
-└── shared/            # 공통 타입 정의
+└── backend/           # NestJS + PostgreSQL
 ```
 
 <br>
