@@ -7,7 +7,10 @@ async function bootstrap() {
 
   // CORS 설정 추가
   app.enableCors({
-    origin: 'http://localhost:5173', // 프론트엔드 주소
+    origin: [
+      'http://localhost:5173', // 개발 환경
+      'https://siwonsportfolio.netlify.app', // 프로덕션 환경
+    ],
     credentials: true, // 쿠키/인증 헤더 허용
   });
 
