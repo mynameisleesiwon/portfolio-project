@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { User } from './entities/user.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { User } from './entities/user.entity';
       }),
       inject: [ConfigService], // ConfigService를 주입받아 환경 변수에 접근
     }),
+    AuthModule, // Auth 모듈 추가
   ],
   controllers: [AppController], // HTTP 요청을 처리하는 컨트롤러
   providers: [AppService], // 비즈니스 로직을 담당하는 서비스
