@@ -24,6 +24,13 @@ export interface User {
 export interface AuthResponse {
   message: string;
   user: User;
+  token: string; // 토큰 필드 추가
+}
+
+// 보호된 API 응답 타입 (프로필 조회용)
+export interface ProfileResponse {
+  message: string;
+  user: User;
 }
 
 // 에러 응답 타입

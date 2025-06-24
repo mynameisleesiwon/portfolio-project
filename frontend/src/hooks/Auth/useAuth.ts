@@ -1,8 +1,14 @@
 import { useAuthStore } from '../../store/authStore';
-import type { SignUpRequest, SignInRequest, AuthResponse } from '../../types';
+import type {
+  SignUpRequest,
+  SignInRequest,
+  AuthResponse,
+  ProfileResponse,
+} from '../../types';
 import { authApiService } from '../../services/authApi';
 import { useToastStore } from '../../store/toastStore';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 // 인증 관련 커스텀 훅
 export const useAuth = () => {
@@ -29,7 +35,7 @@ export const useAuth = () => {
       setError(null);
 
       const response: AuthResponse = await authApiService.signUp(userData);
-      login(response.user); // Auth Store에 사용자 정보 저장
+      login(response.user, response.token); // Auth Store에 사용자 정보 저장, 토큰도 함께 저장
       addToast('success', '회원가입에 성공했습니다!');
       navigate('/');
     } catch (error) {
@@ -50,7 +56,7 @@ export const useAuth = () => {
       setError(null);
 
       const response: AuthResponse = await authApiService.signIn(userData);
-      login(response.user); // Auth Store에 사용자 정보 저장
+      login(response.user, response.token); // Auth Store에 사용자 정보 저장, 토큰도 함께 저장
       addToast('success', '로그인에 성공했습니다!');
       navigate('/');
     } catch (error) {
@@ -66,9 +72,33 @@ export const useAuth = () => {
 
   // 로그아웃 함수
   const signOut = () => {
-    logout(); // Auth Store에서 로그아웃 처리
+    logout(); // Auth Store에서 로그아웃 처리 (토큰도 제거됨)
     addToast('success', '로그아웃되었습니다.');
     navigate('/');
+  };
+
+  // useAuth.ts - getProfile 함수 추가
+  const getProfile = async (): Promise<ProfileResponse> => {
+    try {
+      const response = await authApiService.getProfile();
+      return response;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        // 보호된 엔드포인트에서 401 = 토큰 만료
+        logout();
+        addToast('error', '토큰이 만료되었습니다. 다시 로그인해주세요.');
+        navigate('/auth/signin');
+      } else {
+        // 다른 에러 처리
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : '프로필 조회에 실패했습니다.';
+        setError(errorMessage);
+        addToast('error', errorMessage);
+      }
+      throw error;
+    }
   };
 
   return {
@@ -84,6 +114,7 @@ export const useAuth = () => {
     signUp,
     signIn,
     signOut,
+    getProfile,
     clearError,
   };
 };
