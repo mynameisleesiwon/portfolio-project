@@ -9,12 +9,14 @@ import { User } from '../entities/user.entity';
 import { SignUpDto } from './dto/signup.dto';
 import { SignInDto } from './dto/signin.dto';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from './jwt.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>, // User 엔티티를 다루는 리포지토리
+    private jwtService: JwtService,
   ) {}
 
   // 회원가입 메서드
@@ -52,7 +54,14 @@ export class AuthService {
 
     // 비밀번호를 제외한 사용자 정보 반환
     const { password: _, ...result } = savedUser;
-    return result;
+
+    // JWT 토큰 생성
+    const token = this.jwtService.generateToken(savedUser);
+
+    return {
+      user: result,
+      token,
+    };
   }
 
   // 로그인 메서드
@@ -73,6 +82,13 @@ export class AuthService {
 
     // 비밀번호를 제외한 사용자 정보 반환
     const { password: _, ...result } = user;
-    return result;
+
+    // JWT 토큰 생성
+    const token = this.jwtService.generateToken(user);
+
+    return {
+      user: result,
+      token,
+    };
   }
 }

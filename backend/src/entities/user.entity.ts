@@ -26,10 +26,36 @@ export class User {
   nickname: string;
 
   // 생성일시 - 사용자가 가입한 시간 (자동 생성)
-  @CreateDateColumn()
+  @CreateDateColumn({
+    type: 'timestamp',
+    transformer: {
+      to: (value: Date) => value,
+      from: (value: Date) => {
+        if (value) {
+          // UTC를 한국 시간으로 변환
+          const koreanTime = new Date(value.getTime() + 9 * 60 * 60 * 1000);
+          return koreanTime;
+        }
+        return value;
+      },
+    },
+  })
   createdAt: Date;
 
   // 수정일시 - 사용자 정보가 마지막으로 수정된 시간 (자동 업데이트)
-  @UpdateDateColumn()
+  @UpdateDateColumn({
+    type: 'timestamp',
+    transformer: {
+      to: (value: Date) => value,
+      from: (value: Date) => {
+        if (value) {
+          // UTC를 한국 시간으로 변환
+          const koreanTime = new Date(value.getTime() + 9 * 60 * 60 * 1000);
+          return koreanTime;
+        }
+        return value;
+      },
+    },
+  })
   updatedAt: Date;
 }

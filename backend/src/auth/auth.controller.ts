@@ -15,7 +15,8 @@ export class AuthController {
 
     return {
       message: '회원가입이 성공적으로 완료되었습니다.',
-      user: result,
+      user: result.user,
+      token: result.token,
     };
   }
 
@@ -28,7 +29,8 @@ export class AuthController {
 
     return {
       message: '로그인이 성공적으로 완료되었습니다.',
-      user: result,
+      user: result.user,
+      token: result.token,
     };
   }
 }
