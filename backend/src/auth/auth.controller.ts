@@ -1,7 +1,17 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  Get,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/signup.dto';
 import { SignInDto } from './dto/signin.dto';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('auth') // '/auth' 경로로 시작하는 모든 요청을 처리
 export class AuthController {
@@ -31,6 +41,17 @@ export class AuthController {
       message: '로그인이 성공적으로 완료되었습니다.',
       user: result.user,
       token: result.token,
+    };
+  }
+
+  // 보호된 엔드포인트 - JWT 토큰 필요한 API
+  @Get('profile')
+  @UseGuards(JwtAuthGuard) // JwtAuthGuard를 사용해서 토큰 검증
+  async getProfile(@Req() req) {
+    // req.user에 사용자 정보가 자동으로 추가됨
+    return {
+      message: '프로필 조회가 성공적으로 완료되었습니다.',
+      user: req.user,
     };
   }
 }
