@@ -27,6 +27,24 @@
   --color-border-hover: #cad3c1;
   --color-card-hover: #f0f5eb;
 
+  /* 토스트 색상 (라이트 모드) */
+  --color-toast-success-bg: rgba(240, 253, 244, 0.95);
+  --color-toast-success-border: rgba(187, 247, 208, 0.8);
+  --color-toast-success-text: rgb(22, 101, 52);
+  --color-toast-success-icon: rgb(34, 197, 94);
+  --color-toast-error-bg: rgba(254, 242, 242, 0.95);
+  --color-toast-error-border: rgba(254, 202, 202, 0.8);
+  --color-toast-error-text: rgb(153, 27, 27);
+  --color-toast-error-icon: rgb(239, 68, 68);
+  --color-toast-warning-bg: rgba(254, 252, 232, 0.95);
+  --color-toast-warning-border: rgba(254, 243, 199, 0.8);
+  --color-toast-warning-text: rgb(146, 64, 14);
+  --color-toast-warning-icon: rgb(234, 179, 8);
+  --color-toast-progress-bg: #e5e7eb;
+  --color-toast-close: #9ca3af;
+  --color-toast-close-hover: #4b5563;
+  --color-toast-close-bg-hover: #f3f4f6;
+
   /* 폰트 설정 */
   --font-family-sans: 'Pretendard Variable', 'Noto Sans KR', system-ui,
     sans-serif;
@@ -54,6 +72,24 @@
   --color-accent-hover: #e5bf95;
   --color-border-hover: #3d3d3d;
   --color-card-hover: #262626;
+
+  /* 토스트 색상 (다크 모드) */
+  --color-toast-success-bg: rgba(22, 22, 22, 0.95);
+  --color-toast-success-border: rgba(55, 55, 55, 0.8);
+  --color-toast-success-text: #e0e0e0;
+  --color-toast-success-icon: #5b9c52;
+  --color-toast-error-bg: rgba(22, 22, 22, 0.95);
+  --color-toast-error-border: rgba(55, 55, 55, 0.8);
+  --color-toast-error-text: #e0e0e0;
+  --color-toast-error-icon: #ef4444;
+  --color-toast-warning-bg: rgba(22, 22, 22, 0.95);
+  --color-toast-warning-border: rgba(55, 55, 55, 0.8);
+  --color-toast-warning-text: #e0e0e0;
+  --color-toast-warning-icon: #eab308;
+  --color-toast-progress-bg: #374151;
+  --color-toast-close: #9ca3af;
+  --color-toast-close-hover: #d1d5db;
+  --color-toast-close-bg-hover: #374151;
 }
 
 /* 기본 스타일 설정 */
