@@ -15,7 +15,7 @@ const Toast = ({ id, type, message, onClose }: ToastProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose(id);
-    }, 4000);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, [id, onClose]);
@@ -70,7 +70,7 @@ const Toast = ({ id, type, message, onClose }: ToastProps) => {
           className={`h-full ${styles.progress}`}
           initial={{ width: '100%' }}
           animate={{ width: '0%' }}
-          transition={{ duration: 4, ease: 'linear' }}
+          transition={{ duration: 2, ease: 'linear' }}
         />
       </div>
 
