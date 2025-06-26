@@ -4,6 +4,8 @@ import type {
   SignInRequest,
   AuthResponse,
   ProfileResponse,
+  UpdateProfileRequest,
+  CheckNicknameResponse,
 } from '../../types';
 import { authApiService } from '../../services/authApi';
 import { useToastStore } from '../../store/toastStore';
@@ -101,6 +103,44 @@ export const useAuth = () => {
     }
   };
 
+  // 프로필 업데이트 함수
+  const updateProfile = async (data: UpdateProfileRequest) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await authApiService.updateProfile(data);
+
+      // Zustand store 업데이트
+      login(response.user, useAuthStore.getState().token!);
+
+      addToast('success', '프로필이 성공적으로 업데이트되었습니다!');
+      return response;
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : '프로필 업데이트에 실패했습니다.';
+      setError(errorMessage);
+      addToast('error', errorMessage);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 닉네임 중복 검사 함수
+  const checkNickname = async (
+    nickname: string
+  ): Promise<CheckNicknameResponse> => {
+    try {
+      const response = await authApiService.checkNickname(nickname);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   return {
     // 데이터
     user,
@@ -116,5 +156,7 @@ export const useAuth = () => {
     signOut,
     getProfile,
     clearError,
+    updateProfile,
+    checkNickname,
   };
 };

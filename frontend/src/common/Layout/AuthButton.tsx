@@ -26,7 +26,10 @@ const AuthButton = () => {
     return (
       <div className="flex items-center gap-2">
         {/* 사용자 정보 표시 */}
-        <div className="flex items-center gap-2 px-3 py-2 bg-card border border-border rounded-lg">
+        <div
+          onClick={() => navigate('/profile')}
+          className="flex items-center gap-2 px-3 py-2 bg-card border border-border rounded-lg cursor-pointer hover:bg-card-hover transition-colors"
+        >
           <img
             src={user?.profileImage || '/default-profile.png'}
             alt="프로필"

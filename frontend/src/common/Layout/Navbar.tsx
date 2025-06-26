@@ -11,7 +11,6 @@ const Navbar = () => {
   const links = [
     { path: '/', label: '홈' },
     { path: '/tech-demo', label: '기능 모음' },
-    { path: '/protected-test', label: '로그인이 필요한 페이지' },
   ];
   return (
     <nav>
