@@ -211,7 +211,8 @@ const ProfileEdit = () => {
                       nickname: e.target.value,
                     }))
                   }
-                  className="w-full pl-10 pr-4 py-3 border border-border rounded-xl bg-bg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  autoComplete="off"
+                  className="w-full pl-10 pr-3 py-3 border border-border rounded-lg bg-card text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                   placeholder="닉네임을 입력하세요"
                   required
                 />
