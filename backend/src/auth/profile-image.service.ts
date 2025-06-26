@@ -58,4 +58,93 @@ export class ProfileImageService {
       });
     }
   }
+
+  /**
+   * 기존 프로필 이미지를 삭제
+   * 개발 환경: 로컬 파일 삭제
+   * 운영 환경: Cloudinary에서 삭제
+   */
+  async deleteImage(imageUrl: string): Promise<void> {
+    if (!imageUrl) return;
+
+    const nodeEnv = this.configService.get('NODE_ENV');
+
+    if (nodeEnv === 'development') {
+      // 개발 환경: 로컬 파일 삭제
+      await this.deleteFromLocal(imageUrl);
+    } else {
+      // 운영 환경: Cloudinary에서 삭제
+      await this.deleteFromCloudinary(imageUrl);
+    }
+  }
+
+  /**
+   * 로컬 파일 삭제
+   */
+  private async deleteFromLocal(imageUrl: string): Promise<void> {
+    try {
+      // URL에서 파일명 추출 (예: http://localhost:3000/uploads/uuid.jpg -> uuid.jpg)
+      const urlParts = imageUrl.split('/');
+      const fileName = urlParts[urlParts.length - 1];
+
+      if (fileName) {
+        const filePath = path.join(process.cwd(), 'uploads', fileName);
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+          console.log(`로컬 파일 삭제 완료: ${fileName}`);
+        }
+      }
+    } catch (error) {
+      console.error('로컬 이미지 삭제 실패:', error);
+    }
+  }
+
+  /**
+   * Cloudinary에서 이미지 삭제
+   */
+  private async deleteFromCloudinary(imageUrl: string): Promise<void> {
+    try {
+      // URL에서 public_id 추출
+      const publicId = this.extractPublicIdFromUrl(imageUrl);
+
+      if (publicId) {
+        await cloudinary.uploader.destroy(publicId);
+        console.log(`Cloudinary 이미지 삭제 완료: ${publicId}`);
+      }
+    } catch (error) {
+      console.error('Cloudinary 이미지 삭제 실패:', error);
+    }
+  }
+
+  /**
+   * Cloudinary URL에서 public_id 추출
+   * 예: https://res.cloudinary.com/df5yrxjun/image/upload/v1750922836/profile-images/xuifnwovnojdrdw07hkl.jpg
+   * -> profile-images/xuifnwovnojdrdw07hkl
+   */
+  private extractPublicIdFromUrl(url: string): string | null {
+    try {
+      // Cloudinary URL 패턴 확인
+      if (!url.includes('cloudinary.com')) {
+        return null;
+      }
+
+      const urlParts = url.split('/');
+      const uploadIndex = urlParts.findIndex((part) => part === 'upload');
+
+      if (uploadIndex !== -1 && uploadIndex + 2 < urlParts.length) {
+        const relevantParts = urlParts.slice(uploadIndex + 2);
+
+        const lastPart = relevantParts[relevantParts.length - 1];
+        const fileNameWithoutExt = lastPart.split('.')[0];
+        relevantParts[relevantParts.length - 1] = fileNameWithoutExt;
+
+        return relevantParts.join('/');
+      }
+
+      return null;
+    } catch (error) {
+      console.error('public_id 추출 실패:', error);
+      return null;
+    }
+  }
 }

@@ -9,6 +9,8 @@ import {
   Req,
   UseInterceptors,
   UploadedFile,
+  Put,
+  Query,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/signup.dto';
@@ -17,6 +19,7 @@ import { JwtAuthGuard } from './jwt-auth.guard';
 import { File as MulterFile } from 'multer';
 import { ProfileImageService } from './profile-image.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 
 @Controller('auth') // '/auth' 경로로 시작하는 모든 요청을 처리
 export class AuthController {
@@ -86,5 +89,40 @@ export class AuthController {
     // 환경에 따라 로컬 또는 Cloudinary에 업로드 후 URL 반환
     const url = await this.profileImageService.uploadImage(file);
     return { url };
+  }
+
+  /**
+   * 프로필 업데이트 엔드포인트
+   * - PUT /auth/update-profile
+   */
+  @Put('update-profile')
+  @UseGuards(JwtAuthGuard)
+  async updateProfile(@Req() req, @Body() updateProfileDto: UpdateProfileDto) {
+    const result = await this.authService.updateProfile(
+      req.user.id,
+      updateProfileDto,
+    );
+
+    return {
+      message: '프로필이 성공적으로 업데이트되었습니다.',
+      user: result.user,
+    };
+  }
+
+  /**
+   * 닉네임 중복 검사 엔드포인트
+   * - GET /auth/check-nickname?nickname=test
+   */
+  @Get('check-nickname')
+  async checkNickname(@Query('nickname') nickname: string) {
+    const isAvailable =
+      await this.authService.checkNicknameAvailability(nickname);
+
+    return {
+      isAvailable,
+      message: isAvailable
+        ? '사용 가능한 닉네임입니다.'
+        : '이미 사용 중인 닉네임입니다.',
+    };
   }
 }

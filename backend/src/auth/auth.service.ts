@@ -2,6 +2,7 @@ import {
   Injectable,
   ConflictException,
   UnauthorizedException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,6 +11,8 @@ import { SignUpDto } from './dto/signup.dto';
 import { SignInDto } from './dto/signin.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from './jwt.service';
+import { UpdateProfileDto } from './dto/update-profile.dto';
+import { ProfileImageService } from './profile-image.service';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +20,7 @@ export class AuthService {
     @InjectRepository(User)
     private userRepository: Repository<User>, // User 엔티티를 다루는 리포지토리
     private jwtService: JwtService,
+    private profileImageService: ProfileImageService,
   ) {}
 
   // 회원가입 메서드
@@ -107,5 +111,65 @@ export class AuthService {
       ],
     });
     return user;
+  }
+
+  // 프로필 업데이트 메서드
+  async updateProfile(userId: number, updateProfileDto: UpdateProfileDto) {
+    const { nickname, profileImage } = updateProfileDto;
+
+    // 사용자 찾기
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('사용자를 찾을 수 없습니다.');
+    }
+
+    // 닉네임 중복 검사 (자신의 닉네임이 아닌 경우)
+    if (nickname !== user.nickname) {
+      const existingNickname = await this.userRepository.findOne({
+        where: { nickname },
+      });
+
+      if (existingNickname) {
+        throw new ConflictException('이미 사용 중인 닉네임입니다.');
+      }
+    }
+
+    // 프로필 이미지 처리 로직
+    if (profileImage === null && user.profileImage) {
+      // 사진 삭제 요청: 기존 이미지 파일 삭제 후 null로 설정
+      await this.profileImageService.deleteImage(user.profileImage);
+      user.profileImage = null;
+    } else if (profileImage && profileImage !== user.profileImage) {
+      // 새 이미지 업로드: 기존 이미지 파일 삭제 후 새 이미지로 설정
+      if (user.profileImage) {
+        await this.profileImageService.deleteImage(user.profileImage);
+      }
+      user.profileImage = profileImage;
+    }
+    // profileImage가 undefined면 기존 이미지 유지 (닉네임만 변경하는 경우)
+
+    // 프로필 업데이트
+    user.nickname = nickname;
+
+    const updatedUser = await this.userRepository.save(user);
+
+    // 비밀번호를 제외한 사용자 정보 반환
+    const { password: _, ...result } = updatedUser;
+
+    return {
+      user: result,
+    };
+  }
+
+  // 닉네임 중복 검사 메서드
+  async checkNicknameAvailability(nickname: string): Promise<boolean> {
+    const existingUser = await this.userRepository.findOne({
+      where: { nickname },
+    });
+
+    return !existingUser; // 사용자가 없으면 true (사용 가능)
   }
 }
