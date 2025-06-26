@@ -7,15 +7,23 @@ import {
   Get,
   UseGuards,
   Req,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/signup.dto';
 import { SignInDto } from './dto/signin.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { File as MulterFile } from 'multer';
+import { ProfileImageService } from './profile-image.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('auth') // '/auth' 경로로 시작하는 모든 요청을 처리
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly profileImageService: ProfileImageService, // 서비스 주입
+  ) {}
 
   // 회원가입 API 엔드포인트
   @Post('signup') // POST /auth/signup
@@ -49,9 +57,34 @@ export class AuthController {
   @UseGuards(JwtAuthGuard) // JwtAuthGuard를 사용해서 토큰 검증
   async getProfile(@Req() req) {
     // req.user에 사용자 정보가 자동으로 추가됨
+    const user = await this.authService.findUserById(req.user.id);
+
+    if (!user) {
+      return {
+        message: '사용자를 찾을 수 없습니다.',
+        user: null,
+      };
+    }
+
     return {
       message: '프로필 조회가 성공적으로 완료되었습니다.',
-      user: req.user,
+      user,
     };
+  }
+
+  /**
+   * 프로필 이미지 업로드 엔드포인트
+   * - 프론트엔드에서 FormData로 파일을 전송하면, 환경에 따라 업로드 후 URL 반환
+   * - POST /auth/upload-profile-image
+   */
+  @Post('upload-profile-image')
+  @UseInterceptors(FileInterceptor('file')) // Multer로 파일 파싱
+  async uploadProfileImage(@UploadedFile() file: MulterFile) {
+    if (!file) {
+      return { url: null, message: '파일이 업로드되지 않았습니다.' };
+    }
+    // 환경에 따라 로컬 또는 Cloudinary에 업로드 후 URL 반환
+    const url = await this.profileImageService.uploadImage(file);
+    return { url };
   }
 }

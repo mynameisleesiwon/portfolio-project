@@ -8,6 +8,7 @@ import { JwtService } from './jwt.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
+import { ProfileImageService } from './profile-image.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
@@ -23,7 +24,7 @@ import { JwtStrategy } from './jwt.strategy';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtService, JwtStrategy], // JwtStrategy 추가
+  providers: [AuthService, JwtService, JwtStrategy, ProfileImageService], // ProfileImageService 추가
   exports: [AuthService, JwtService],
 })
 export class AuthModule {}

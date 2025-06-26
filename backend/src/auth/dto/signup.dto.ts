@@ -1,4 +1,10 @@
-import { IsString, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  MinLength,
+  MaxLength,
+  IsOptional,
+} from 'class-validator';
 
 // 회원가입 시 전달받을 데이터의 형식을 정의하는 DTO
 export class SignUpDto {
@@ -22,4 +28,10 @@ export class SignUpDto {
   @MinLength(2, { message: '닉네임은 최소 2자 이상이어야 합니다.' })
   @MaxLength(20, { message: '닉네임은 최대 20자까지 가능합니다.' })
   nickname: string;
+
+  // 프로필 이미지 URL
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  profileImage?: string;
 }

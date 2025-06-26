@@ -21,7 +21,7 @@ export class AuthService {
 
   // 회원가입 메서드
   async signUp(signUpDto: SignUpDto) {
-    const { userId, password, nickname } = signUpDto;
+    const { userId, password, nickname, profileImage } = signUpDto;
 
     // 사용자 ID 중복 검사
     const existingUser = await this.userRepository.findOne({
@@ -47,6 +47,7 @@ export class AuthService {
       userId,
       password: hashedPassword,
       nickname,
+      profileImage: profileImage ?? null, // 프로필 이미지가 없으면 null로 저장
     });
 
     // 데이터베이스에 저장
@@ -90,5 +91,21 @@ export class AuthService {
       user: result,
       token,
     };
+  }
+
+  // 사용자 정보 조회
+  async findUserById(id: number): Promise<Partial<User> | null> {
+    const user = await this.userRepository.findOne({
+      where: { id },
+      select: [
+        'id',
+        'userId',
+        'nickname',
+        'profileImage',
+        'createdAt',
+        'updatedAt',
+      ],
+    });
+    return user;
   }
 }

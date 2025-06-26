@@ -1,25 +1,32 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { NestExpressApplication } from '@nestjs/platform-express'; // 추가
+import { join } from 'path'; // 추가
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  // NestExpressApplication 타입으로 앱 생성
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // CORS 설정 추가
+  // CORS 설정
   app.enableCors({
-    origin: [
-      'http://localhost:5173', // 개발 환경
-      'https://siwonsportfolio.netlify.app', // 프로덕션 환경
-    ],
-    credentials: true, // 쿠키/인증 헤더 허용
+    origin: ['http://localhost:5173', 'https://siwonsportfolio.netlify.app'],
+    credentials: true,
   });
 
-  // ValidationPipe 설정 추가
+  // 개발 환경에서만 uploads 폴더 정적 서빙
+  if (process.env.NODE_ENV === 'development') {
+    app.useStaticAssets(join(process.cwd(), 'uploads'), {
+      prefix: '/uploads/',
+    });
+  }
+
+  // ValidationPipe 설정
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // DTO에 정의되지 않은 속성 제거
-      forbidNonWhitelisted: true, // DTO에 정의되지 않은 속성이 있으면 에러
-      transform: true, // 요청 데이터를 DTO 타입으로 변환
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
     }),
   );
 

@@ -58,4 +58,8 @@ export class User {
     },
   })
   updatedAt: Date;
+
+  // 프로필 이미지 URL
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  profileImage: string | null;
 }
