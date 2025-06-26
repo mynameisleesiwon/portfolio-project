@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/Auth/useAuth';
-import { LogIn, LogOut, User } from 'lucide-react';
+import { LogIn, LogOut } from 'lucide-react';
 
 const AuthButton = () => {
   const navigate = useNavigate();

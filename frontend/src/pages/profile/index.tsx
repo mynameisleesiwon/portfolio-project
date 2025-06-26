@@ -1,7 +1,7 @@
 import { useAuth } from '../../hooks/Auth/useAuth';
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Edit, Settings, Calendar } from 'lucide-react';
+import { Edit, Calendar } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
@@ -11,10 +11,6 @@ const Profile = () => {
   // 버튼 클릭 핸들러
   const handleEditProfile = () => {
     navigate('/profile/edit');
-  };
-
-  const handleChangePassword = () => {
-    navigate('/profile/password');
   };
 
   useEffect(() => {
@@ -82,13 +78,6 @@ const Profile = () => {
                 <Edit className="w-5 h-5" />
                 프로필 수정
               </button>
-              {/* <button
-                onClick={handleChangePassword}
-                className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-secondary text-white rounded-xl hover:bg-secondary-hover transition-all duration-200 font-medium shadow-md hover:shadow-lg"
-              >
-                <Settings className="w-5 h-5" />
-                비밀번호 변경
-              </button> */}
             </div>
           </div>
         </div>
