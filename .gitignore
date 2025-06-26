@@ -26,3 +26,6 @@ backend/.env
 backend/.env.local
 backend/.env.development
 backend/.env.production
+
+# 파일 업로드 폴더 무시
+backend/uploads/
