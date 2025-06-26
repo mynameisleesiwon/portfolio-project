@@ -36,7 +36,21 @@ export const useAuth = () => {
       setLoading(true);
       setError(null);
 
-      const response: AuthResponse = await authApiService.signUp(userData);
+      // 이미지 업로드가 있는 경우 먼저 처리
+      let profileImageUrl: string | undefined = undefined;
+      if (userData.profileImage instanceof File) {
+        profileImageUrl = await authApiService.uploadProfileImage(
+          userData.profileImage
+        );
+      } else {
+        profileImageUrl = userData.profileImage || undefined;
+      }
+
+      const response: AuthResponse = await authApiService.signUp({
+        ...userData,
+        profileImage: profileImageUrl,
+      });
+
       login(response.user, response.token); // Auth Store에 사용자 정보 저장, 토큰도 함께 저장
       addToast('success', '회원가입에 성공했습니다!');
       navigate('/');

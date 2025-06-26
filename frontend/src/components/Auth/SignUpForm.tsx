@@ -2,7 +2,6 @@ import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { User, Lock, Loader2, Eye, EyeOff, AtSign, Camera } from 'lucide-react';
 import { useAuth } from '../../hooks/Auth/useAuth';
-import { authApiService } from '../../services/authApi';
 import type { SignUpRequest } from '../../types';
 
 const SignUpForm = () => {
@@ -47,16 +46,9 @@ const SignUpForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    let profileImageUrl: string | undefined = undefined;
-    if (profileImageFile) {
-      profileImageUrl = await authApiService.uploadProfileImage(
-        profileImageFile
-      );
-    }
-
     await signUp({
       ...formData,
-      profileImage: profileImageUrl, // 없으면 undefined
+      profileImage: profileImageFile || undefined, // File 객체 직접 전달
     });
   };
 
