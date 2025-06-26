@@ -72,6 +72,31 @@ export const authApiService = {
       throw error;
     }
   },
+
+  // 프로필 이미지 업로드 API
+  async uploadProfileImage(file: File): Promise<string> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await authApi.post(
+        '/auth/upload-profile-image',
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      );
+      return response.data.url;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(
+          error.response?.data?.message ||
+            '프로필 이미지 업로드 중 오류가 발생했습니다.'
+        );
+      }
+      throw error;
+    }
+  },
 };
 
 export default authApi;

@@ -27,7 +27,11 @@ const AuthButton = () => {
       <div className="flex items-center gap-2">
         {/* 사용자 정보 표시 */}
         <div className="flex items-center gap-2 px-3 py-2 bg-card border border-border rounded-lg">
-          <User className="w-4 h-4 text-primary" />
+          <img
+            src={user?.profileImage || '/default-profile.png'}
+            alt="프로필"
+            className="w-6 h-6 rounded-full object-cover border border-primary"
+          />
           <span className="truncate max-w-[80px]">{user?.nickname}</span>
         </div>
 

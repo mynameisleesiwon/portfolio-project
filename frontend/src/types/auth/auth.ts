@@ -3,6 +3,7 @@ export interface SignUpRequest {
   userId: string;
   password: string;
   nickname: string;
+  profileImage?: string | null;
 }
 
 // 로그인 요청 데이터 타입
@@ -18,6 +19,7 @@ export interface User {
   nickname: string;
   createdAt: string;
   updatedAt: string;
+  profileImage?: string | null; // 프로필 이미지 URL (nullable)
 }
 
 // API 응답 타입

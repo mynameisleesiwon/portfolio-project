@@ -1,22 +1,30 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { User, Lock, Loader2, Eye, EyeOff, AtSign } from 'lucide-react';
+import { User, Lock, Loader2, Eye, EyeOff, AtSign, Camera } from 'lucide-react';
 import { useAuth } from '../../hooks/Auth/useAuth';
+import { authApiService } from '../../services/authApi';
 import type { SignUpRequest } from '../../types';
 
 const SignUpForm = () => {
-  // useAuth 훅 사용
   const { signUp, isLoading } = useAuth();
 
-  // 폼 상태 관리
-  const [formData, setFormData] = useState<SignUpRequest>({
-    userId: '',
-    password: '',
-    nickname: '',
-  });
+  // 폼 상태 (텍스트 필드만)
+  const [formData, setFormData] = useState<Omit<SignUpRequest, 'profileImage'>>(
+    {
+      userId: '',
+      password: '',
+      nickname: '',
+    }
+  );
 
-  // 비밀번호 표시/숨김 상태
+  // 프로필 이미지 파일 및 미리보기
+  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+  const [profileImagePreview, setProfileImagePreview] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
+
+  // 같은 이미지를 다시 선택할 때 onChange가 동작하도록
+  // 파일 input의 value를 강제로 초기화(리셋)하기 위한 ref
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 입력값 변경 핸들러
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,20 +35,29 @@ const SignUpForm = () => {
     }));
   };
 
-  // 비밀번호 표시/숨김 토글 핸들러
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+  // 파일 선택 핸들러
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setProfileImageFile(e.target.files[0]);
+      setProfileImagePreview(URL.createObjectURL(e.target.files[0]));
+    }
   };
 
   // 폼 제출 핸들러
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      await signUp(formData);
-    } catch (error) {
-      // 에러는 useAuth에서 처리됨
+    let profileImageUrl: string | undefined = undefined;
+    if (profileImageFile) {
+      profileImageUrl = await authApiService.uploadProfileImage(
+        profileImageFile
+      );
     }
+
+    await signUp({
+      ...formData,
+      profileImage: profileImageUrl, // 없으면 undefined
+    });
   };
 
   return (
@@ -51,6 +68,55 @@ const SignUpForm = () => {
       onSubmit={handleSubmit}
       className="space-y-6"
     >
+      {/* 프로필 이미지 업로드 (아바타) */}
+      <div className="flex flex-col items-center mb-6">
+        <label
+          htmlFor="profileImage"
+          className="cursor-pointer relative group"
+          title="프로필 이미지 변경"
+        >
+          <img
+            src={profileImagePreview || '/default-profile.png'}
+            alt="프로필 미리보기"
+            className="w-24 h-24 rounded-full object-cover border-2 border-primary shadow transition-all group-hover:opacity-80"
+          />
+          {/* 카메라 아이콘 오버레이 */}
+          <span className="absolute bottom-1 right-1 bg-primary text-white rounded-full p-1 shadow group-hover:bg-primary-hover">
+            <Camera className="w-4 h-4" />
+          </span>
+          <input
+            id="profileImage"
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="hidden"
+            disabled={isLoading}
+            ref={fileInputRef}
+          />
+        </label>
+        <span className="text-xs text-muted-foreground mt-2">
+          프로필 이미지는 선택 사항입니다.
+        </span>
+        {/* 기본 이미지로 되돌리기 버튼 */}
+        {profileImagePreview && (
+          <button
+            type="button"
+            onClick={() => {
+              setProfileImageFile(null);
+              setProfileImagePreview('');
+              // input value 리셋
+              if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+              }
+            }}
+            className="mt-2 text-xs text-primary underline hover:text-primary-hover"
+            disabled={isLoading}
+          >
+            기본 이미지로 되돌리기
+          </button>
+        )}
+      </div>
+
       {/* 사용자 ID 입력 */}
       <div>
         <label
@@ -125,7 +191,7 @@ const SignUpForm = () => {
           />
           <button
             type="button"
-            onClick={togglePasswordVisibility}
+            onClick={() => setShowPassword((prev) => !prev)}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-muted hover:text-text transition-colors p-1 rounded-md hover:bg-border"
             disabled={isLoading}
             aria-label={showPassword ? '비밀번호 숨기기' : '비밀번호 보기'}
