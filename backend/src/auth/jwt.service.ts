@@ -11,7 +11,6 @@ export class JwtService {
     const payload = {
       sub: user.id,
       userId: user.userId,
-      nickname: user.nickname,
     };
 
     return this.jwtService.sign(payload);

@@ -37,7 +37,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     return {
       id: payload.sub, // 사용자 ID (JWT 표준: sub)
       userId: payload.userId, // 로그인용 사용자 ID
-      nickname: payload.nickname, // 사용자 닉네임
     };
   }
 }
