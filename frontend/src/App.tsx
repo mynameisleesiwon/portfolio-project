@@ -15,7 +15,6 @@ import SystemThemeDetector from './components/DarkMode/SystemThemeDetector';
 import SignIn from './pages/auth/SignIn';
 import SignUp from './pages/auth/SignUp';
 import ProtectedRoute from './common/components/ProtectedRoute';
-import ProtectedTest from './pages/ProtectedTest';
 import ToastContainer from './common/components/ToastContainer';
 import { useToastStore } from './store/toastStore';
 
@@ -52,15 +51,6 @@ function App() {
             {/* 인증 */}
             <Route path="/auth/signin" element={<SignIn />} />
             <Route path="/auth/signup" element={<SignUp />} />
-            {/* 보호된 페이지 */}
-            <Route
-              path="/protected-test"
-              element={
-                <ProtectedRoute>
-                  <ProtectedTest />
-                </ProtectedRoute>
-              }
-            />
             {/* 게시판 */}
             <Route path="/tech-demo/board" element={<BoardDemo />} />
             <Route path="/tech-demo/board/create" element={<BoardCreate />} />
