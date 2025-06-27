@@ -73,6 +73,7 @@ const SignInForm = () => {
             disabled={isLoading}
           />
         </div>
+        <p className="text-xs text-text-muted mt-1">테스트 계정 ID: test</p>
       </div>
 
       {/* 비밀번호 입력 */}
@@ -111,6 +112,7 @@ const SignInForm = () => {
             )}
           </button>
         </div>
+        <p className="text-xs text-text-muted mt-1">테스트 계정 PW: test123</p>
       </div>
 
       {/* 로그인 버튼 */}
