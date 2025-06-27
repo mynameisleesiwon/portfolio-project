@@ -7,6 +7,7 @@ import type {
   UpdateProfileRequest,
   UpdateProfileResponse,
   CheckNicknameResponse,
+  DeleteAccountResponse,
 } from '../types';
 import { useAuthStore } from '../store/authStore';
 
@@ -131,6 +132,23 @@ export const authApiService = {
         throw new Error(
           error.response?.data?.message ||
             '닉네임 중복 검사 중 오류가 발생했습니다.'
+        );
+      }
+      throw error;
+    }
+  },
+
+  // 회원 탈퇴 API
+  async deleteAccount(password: string): Promise<DeleteAccountResponse> {
+    try {
+      const response = await authApi.delete('/auth/delete-account', {
+        data: { password },
+      });
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(
+          error.response?.data?.message || '회원 탈퇴 중 오류가 발생했습니다.'
         );
       }
       throw error;

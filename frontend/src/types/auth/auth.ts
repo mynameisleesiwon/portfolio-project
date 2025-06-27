@@ -40,3 +40,8 @@ export interface AuthError {
   message: string;
   statusCode?: number;
 }
+
+// 회원 탈퇴 응답 타입
+export interface DeleteAccountResponse {
+  message: string;
+}

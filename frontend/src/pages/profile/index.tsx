@@ -1,16 +1,22 @@
 import { useAuth } from '../../hooks/Auth/useAuth';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Edit, Calendar } from 'lucide-react';
+import { Edit, Calendar, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import DeleteAccountModal from '../../components/Auth/DeleteAccountModal';
 
 const Profile = () => {
   const { user, getProfile } = useAuth();
   const navigate = useNavigate();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // 버튼 클릭 핸들러
   const handleEditProfile = () => {
     navigate('/profile/edit');
+  };
+
+  const handleDeleteAccount = () => {
+    setShowDeleteModal(true);
   };
 
   useEffect(() => {
@@ -78,10 +84,24 @@ const Profile = () => {
                 <Edit className="w-5 h-5" />
                 프로필 수정
               </button>
+
+              <button
+                onClick={handleDeleteAccount}
+                className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-text-muted/10 hover:bg-text-muted/20 text-text-muted border border-border hover:border-text-muted/30 rounded-xl transition-all duration-200 font-medium"
+              >
+                <Trash2 className="w-5 h-5" />
+                회원 탈퇴
+              </button>
             </div>
           </div>
         </div>
       </motion.div>
+
+      {/* 탈퇴 확인 모달 */}
+      <DeleteAccountModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+      />
     </div>
   );
 };
