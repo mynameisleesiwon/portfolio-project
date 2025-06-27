@@ -11,6 +11,7 @@ import {
   UploadedFile,
   Put,
   Query,
+  Delete,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/signup.dto';
@@ -20,6 +21,7 @@ import { File as MulterFile } from 'multer';
 import { ProfileImageService } from './profile-image.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { DeleteAccountDto } from './dto/delete-account.dto';
 
 @Controller('auth') // '/auth' 경로로 시작하는 모든 요청을 처리
 export class AuthController {
@@ -124,5 +126,20 @@ export class AuthController {
         ? '사용 가능한 닉네임입니다.'
         : '이미 사용 중인 닉네임입니다.',
     };
+  }
+
+  /**
+   * 회원 탈퇴 엔드포인트
+   * - DELETE /auth/delete-account
+   */
+  @Delete('delete-account')
+  @UseGuards(JwtAuthGuard)
+  async deleteAccount(@Req() req, @Body() deleteAccountDto: DeleteAccountDto) {
+    const result = await this.authService.deleteAccount(
+      req.user.id,
+      deleteAccountDto.password,
+    );
+
+    return result;
   }
 }

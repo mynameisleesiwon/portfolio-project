@@ -172,4 +172,34 @@ export class AuthService {
 
     return !existingUser; // 사용자가 없으면 true (사용 가능)
   }
+
+  // 회원 탈퇴 메서드
+  async deleteAccount(userId: number, password: string) {
+    // 사용자 찾기
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('사용자를 찾을 수 없습니다.');
+    }
+
+    // 비밀번호 확인
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('비밀번호가 올바르지 않습니다.');
+    }
+
+    // 프로필 이미지가 있으면 삭제
+    if (user.profileImage) {
+      await this.profileImageService.deleteImage(user.profileImage);
+    }
+
+    // 사용자 데이터 삭제
+    await this.userRepository.remove(user);
+
+    return {
+      message: '회원 탈퇴가 성공적으로 완료되었습니다.',
+    };
+  }
 }
