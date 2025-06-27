@@ -7,6 +7,9 @@ import {
   SiNextdotjs,
   SiGithub,
   SiClaude,
+  SiPostgresql,
+  SiNestjs,
+  SiAngular,
 } from 'react-icons/si';
 
 import { motion } from 'framer-motion';
@@ -35,8 +38,20 @@ const SkillsSection = () => {
       name: 'React',
     },
     {
+      icon: <SiAngular className="text-red-600" />,
+      name: 'Angular',
+    },
+    {
       icon: <SiNextdotjs className="text-black dark:text-white" />,
       name: 'Next.js',
+    },
+    {
+      icon: <SiNestjs className="text-red-500" />,
+      name: 'NestJS',
+    },
+    {
+      icon: <SiPostgresql className="text-blue-700" />,
+      name: 'PostgreSQL',
     },
     {
       icon: <JSPIcon />,

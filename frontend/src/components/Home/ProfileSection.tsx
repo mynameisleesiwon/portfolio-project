@@ -16,7 +16,7 @@ const ProfileSection = () => {
       >
         <img
           src="/profile.png"
-          alt="이시원 프로플 사진"
+          alt="이시원 프로필 사진"
           className="w-full h-full object-cover"
         />
       </motion.div>
