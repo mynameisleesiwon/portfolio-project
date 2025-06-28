@@ -1,69 +1,131 @@
-import { motion } from 'framer-motion';
-import { ExternalLink, Github, Mail, MapPin } from 'lucide-react';
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
+import {
+  ExternalLink,
+  Github,
+  Mail,
+  MapPin,
+  Award,
+  GraduationCap,
+  User,
+} from 'lucide-react';
+
 const InfoSection = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
+
   return (
     <motion.section
-      className="grid grid-cols-1 md:grid-cols-3 gap-8 py-8 border-t border-border"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.5, duration: 0.5 }}
+      ref={ref}
+      className="grid grid-cols-1 md:grid-cols-3 gap-8 py-21 border-t border-border mb-0"
+      initial={{ opacity: 0, y: 50 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
     >
-      {/* 개인 정보 */}
-      <div className="flex flex-col items-center md:items-start ">
-        <h2 className="text-2xl font-bold mb-4">👤 이시원</h2>
-        <ul className="space-y-2">
-          <li className="flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-primary" />
-            <span>1995.02.19 / 광주광역시</span>
+      {/* 개인 정보 카드 */}
+      <motion.div
+        className="bg-card border border-border rounded-2xl p-8 shadow-primary/30 transition-all duration-300  "
+        initial={{ opacity: 0, y: 30 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+        transition={{ duration: 0.4, delay: 0.1, ease: 'easeOut' }}
+      >
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-2 bg-primary/10 rounded-lg">
+            <User className="w-6 h-6 text-primary" />
+          </div>
+          <h2 className="text-2xl font-bold">이시원</h2>
+        </div>
+        <ul className="space-y-3">
+          <li className="flex items-center gap-3">
+            <MapPin className="w-5 h-5 text-primary flex-shrink-0" />
+            <span className="text-sm">1995.02.19 / 광주광역시</span>
           </li>
-          <li className="flex items-center gap-2">
-            <Mail className="w-5 h-5 text-primary" />
-            <span>seoil1221@gmail.com</span>
+          <li className="flex items-center gap-3">
+            <Mail className="w-5 h-5 text-primary flex-shrink-0" />
+            <span className="text-sm">seoil1221@gmail.com</span>
           </li>
-          <li className="flex items-center gap-2">
-            <Github className="w-5 h-5 text-primary" />
+          <li className="flex items-center gap-3">
+            <Github className="w-5 h-5 text-primary flex-shrink-0" />
             <a
               href="https://github.com/mynameisleesiwon"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:underline transition-colors hover:text-secondary-hover"
+              className="text-sm hover:underline transition-colors hover:text-secondary-hover"
             >
               깃허브
             </a>
           </li>
-          <li className="flex items-center gap-2">
-            <ExternalLink className="w-5 h-5 text-primary" />
+          <li className="flex items-center gap-3">
+            <ExternalLink className="w-5 h-5 text-primary flex-shrink-0" />
             <a
               href="https://velog.io/@seoil1221/posts"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:underline transition-colors hover:text-secondary-hover"
+              className="text-sm hover:underline transition-colors hover:text-secondary-hover"
             >
               개발 블로그
             </a>
           </li>
         </ul>
-      </div>
+      </motion.div>
 
-      {/* LICENSE */}
-      <div className="flex flex-col items-center md:items-start ">
-        <h2 className="text-2xl font-bold mb-4">🏆 LICENSE</h2>
-        <ul className="space-y-2">
-          <li className="flex items-center">정보처리기사</li>
-          <li className="flex items-center">컴퓨터 활용능력 1급</li>
-          <li className="flex items-center">워드프로세서</li>
-        </ul>
-      </div>
-
-      {/* GRADUATION */}
-      <div className="flex flex-col items-center md:items-start ">
-        <h2 className="text-2xl font-bold mb-4">🎓 GRADUATION</h2>
-        <div className="space-y-2">
-          <p>2020 전남대학교 졸업</p>
-          <p>전공 : 불어불문학과</p>
-          <p>부전공 : 심리학과</p>
+      {/* LICENSE 카드 */}
+      <motion.div
+        className="bg-card border border-border rounded-2xl p-8 shadow-primary/30 transition-all duration-300"
+        initial={{ opacity: 0, y: 30 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+        transition={{ duration: 0.4, delay: 0.2, ease: 'easeOut' }}
+      >
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-2 bg-primary/10 rounded-lg">
+            <Award className="w-6 h-6 text-primary" />
+          </div>
+          <h2 className="text-2xl font-bold">LICENSE</h2>
         </div>
-      </div>
+        <ul className="space-y-3">
+          <li className="flex items-center gap-3">
+            <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+            <span className="text-sm">정보처리기사</span>
+          </li>
+          <li className="flex items-center gap-3">
+            <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+            <span className="text-sm">컴퓨터 활용능력 1급</span>
+          </li>
+          <li className="flex items-center gap-3">
+            <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+            <span className="text-sm">워드프로세서</span>
+          </li>
+        </ul>
+      </motion.div>
+
+      {/* GRADUATION 카드 */}
+      <motion.div
+        className="bg-card border border-border rounded-2xl p-8 shadow-primary/30 transition-all duration-300"
+        initial={{ opacity: 0, y: 30 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+        transition={{ duration: 0.4, delay: 0.3, ease: 'easeOut' }}
+      >
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-2 bg-primary/10 rounded-lg">
+            <GraduationCap className="w-6 h-6 text-primary" />
+          </div>
+          <h2 className="text-2xl font-bold">GRADUATION</h2>
+        </div>
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+            <span className="text-sm font-medium">2020 전남대학교 졸업</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+            <span className="text-sm">전공 : 불어불문학과</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+            <span className="text-sm">부전공 : 심리학과</span>
+          </div>
+        </div>
+      </motion.div>
     </motion.section>
   );
 };

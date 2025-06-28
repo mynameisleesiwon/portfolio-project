@@ -10,7 +10,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="max-w-screen-lg mx-auto w-full px-4 py-6 ">
+    <div className="max-w-screen-lg mx-auto w-full px-6 py-12 space-y-16">
       <ProfileSection />
       <InfoSection />
       <SkillsSection />
