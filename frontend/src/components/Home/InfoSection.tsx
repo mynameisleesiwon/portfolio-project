@@ -114,7 +114,7 @@ const InfoSection = () => {
         <div className="space-y-3">
           <div className="flex items-center gap-3">
             <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
-            <span className="text-sm font-medium">2020 전남대학교 졸업</span>
+            <span className="text-sm font-medium">전남대학교 졸업</span>
           </div>
           <div className="flex items-center gap-3">
             <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
