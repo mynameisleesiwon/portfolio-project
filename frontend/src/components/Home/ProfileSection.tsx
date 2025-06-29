@@ -37,6 +37,7 @@ const ProfileSection = () => {
               src="/profile.png"
               alt="이시원 프로필 사진"
               className="w-full h-full object-cover absolute inset-0"
+              initial={{ opacity: 1 }}
               animate={{
                 opacity: isHovered ? 0 : 1,
               }}
@@ -51,6 +52,7 @@ const ProfileSection = () => {
               src="/profile2.png"
               alt="이시원 프로필 사진 (호버)"
               className="w-full h-full object-cover absolute inset-0"
+              initial={{ opacity: 0 }}
               animate={{
                 opacity: isHovered ? 1 : 0,
               }}
