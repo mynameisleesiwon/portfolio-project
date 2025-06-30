@@ -28,10 +28,4 @@ export class SignUpDto {
   @MinLength(2, { message: '닉네임은 최소 2자 이상이어야 합니다.' })
   @MaxLength(20, { message: '닉네임은 최대 20자까지 가능합니다.' })
   nickname: string;
-
-  // 프로필 이미지 URL
-  @IsOptional()
-  @IsString()
-  @MaxLength(255)
-  profileImage?: string;
 }

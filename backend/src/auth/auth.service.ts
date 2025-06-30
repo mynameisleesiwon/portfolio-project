@@ -14,6 +14,7 @@ import { JwtService } from './jwt.service';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ProfileImageService } from './profile-image.service';
 import { JwtPayload } from 'src/types';
+import { File as MulterFile } from 'multer';
 
 @Injectable()
 export class AuthService {
@@ -25,57 +26,76 @@ export class AuthService {
   ) {}
 
   // 회원가입 메서드
-  async signUp(signUpDto: SignUpDto) {
-    const { userId, password, nickname, profileImage } = signUpDto;
+  async signUp(signUpDto: SignUpDto, profileImage?: MulterFile) {
+    const { userId, password, nickname } = signUpDto;
+    let uploadedImageUrl: string | null = null;
 
-    // 사용자 ID 중복 검사
-    const existingUser = await this.userRepository.findOne({
-      where: { userId },
-    });
-    if (existingUser) {
-      throw new ConflictException('이미 존재하는 사용자 ID입니다.');
+    try {
+      // 사용자 ID 중복 검사
+      const existingUser = await this.userRepository.findOne({
+        where: { userId },
+      });
+      if (existingUser) {
+        throw new ConflictException('이미 존재하는 사용자 ID입니다.');
+      }
+
+      // 닉네임 중복 검사
+      const existingNickname = await this.userRepository.findOne({
+        where: { nickname },
+      });
+      if (existingNickname) {
+        throw new ConflictException('이미 존재하는 닉네임입니다.');
+      }
+
+      // 비밀번호 정책 검증
+      const passwordValidation = this.validatePassword(password);
+      if (!passwordValidation.isValid) {
+        throw new ConflictException(passwordValidation.errors.join(', '));
+      }
+
+      // 프로필 이미지 업로드 (있는 경우)
+      if (profileImage) {
+        uploadedImageUrl =
+          await this.profileImageService.uploadImage(profileImage);
+      }
+
+      // 비밀번호 해시화
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // 새 사용자 생성
+      const user = this.userRepository.create({
+        userId,
+        password: hashedPassword,
+        nickname,
+        profileImage: uploadedImageUrl,
+      });
+
+      // 데이터베이스에 저장
+      const savedUser = await this.userRepository.save(user);
+
+      // 비밀번호를 제외한 사용자 정보 반환
+      const { password: _, ...result } = savedUser;
+
+      // Access Token과 Refresh Token 생성
+      const accessToken = this.jwtService.generateAccessToken(savedUser);
+      const refreshToken = this.jwtService.generateRefreshToken(savedUser);
+
+      return {
+        user: result,
+        accessToken,
+        refreshToken,
+      };
+    } catch (error) {
+      // 회원가입 실패 시 업로드된 이미지 삭제
+      if (uploadedImageUrl) {
+        try {
+          await this.profileImageService.deleteImage(uploadedImageUrl);
+        } catch (deleteError) {
+          console.error('이미지 삭제 실패:', deleteError);
+        }
+      }
+      throw error;
     }
-
-    // 닉네임 중복 검사
-    const existingNickname = await this.userRepository.findOne({
-      where: { nickname },
-    });
-    if (existingNickname) {
-      throw new ConflictException('이미 존재하는 닉네임입니다.');
-    }
-
-    // 비밀번호 정책 검증
-    const passwordValidation = this.validatePassword(password);
-    if (!passwordValidation.isValid) {
-      throw new ConflictException(passwordValidation.errors.join(', '));
-    }
-
-    // 비밀번호 해시화 (보안을 위해 평문 비밀번호를 암호화)
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // 새 사용자 생성
-    const user = this.userRepository.create({
-      userId,
-      password: hashedPassword,
-      nickname,
-      profileImage: profileImage ?? null, // 프로필 이미지가 없으면 null로 저장
-    });
-
-    // 데이터베이스에 저장
-    const savedUser = await this.userRepository.save(user);
-
-    // 비밀번호를 제외한 사용자 정보 반환
-    const { password: _, ...result } = savedUser;
-
-    // Access Token과 Refresh Token 생성
-    const accessToken = this.jwtService.generateAccessToken(savedUser);
-    const refreshToken = this.jwtService.generateRefreshToken(savedUser);
-
-    return {
-      user: result,
-      accessToken,
-      refreshToken,
-    };
   }
 
   // 로그인 메서드

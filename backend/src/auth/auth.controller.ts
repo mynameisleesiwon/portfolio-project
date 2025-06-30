@@ -33,9 +33,13 @@ export class AuthController {
 
   // 회원가입 API 엔드포인트
   @Post('signup') // POST /auth/signup
-  async signUp(@Body() signUpDto: SignUpDto) {
+  @UseInterceptors(FileInterceptor('profileImage')) // Multer로 이미지 파일 파싱
+  async signUp(
+    @Body() signUpDto: SignUpDto,
+    @UploadedFile() profileImage?: MulterFile,
+  ) {
     // 클라이언트에서 보낸 회원가입 데이터를 받아서 처리
-    const result = await this.authService.signUp(signUpDto);
+    const result = await this.authService.signUp(signUpDto, profileImage);
 
     return {
       message: '회원가입이 성공적으로 완료되었습니다.',
