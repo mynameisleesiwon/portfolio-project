@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
+import { JwtPayload, JwtUser } from 'src/types';
 
 // JWT 전략 클래스 - JWT 토큰을 검증하고 사용자 정보를 추출하는 역할
 @Injectable()
@@ -31,7 +32,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   // JWT 토큰이 유효할 때 호출되는 메서드
   // payload: JWT 토큰을 디코딩한 페이로드 (사용자 정보 포함)
-  async validate(payload: any) {
+  async validate(payload: JwtPayload): Promise<JwtUser> {
+    // 토큰 타입 확인 (Access Token만 허용)
+    if (payload.type !== 'access') {
+      throw new UnauthorizedException('유효하지 않은 토큰 타입입니다.');
+    }
+
     // 토큰에서 추출한 사용자 정보를 반환
     // 이 정보는 요청 객체에 자동으로 추가됨 (req.user)
     return {

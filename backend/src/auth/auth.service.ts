@@ -13,6 +13,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from './jwt.service';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ProfileImageService } from './profile-image.service';
+import { JwtPayload } from 'src/types';
 
 @Injectable()
 export class AuthService {
@@ -66,12 +67,14 @@ export class AuthService {
     // 비밀번호를 제외한 사용자 정보 반환
     const { password: _, ...result } = savedUser;
 
-    // JWT 토큰 생성
-    const token = this.jwtService.generateToken(savedUser);
+    // Access Token과 Refresh Token 생성
+    const accessToken = this.jwtService.generateAccessToken(savedUser);
+    const refreshToken = this.jwtService.generateRefreshToken(savedUser);
 
     return {
       user: result,
-      token,
+      accessToken,
+      refreshToken,
     };
   }
 
@@ -94,12 +97,14 @@ export class AuthService {
     // 비밀번호를 제외한 사용자 정보 반환
     const { password: _, ...result } = user;
 
-    // JWT 토큰 생성
-    const token = this.jwtService.generateToken(user);
+    // Access Token과 Refresh Token 생성
+    const accessToken = this.jwtService.generateAccessToken(user);
+    const refreshToken = this.jwtService.generateRefreshToken(user);
 
     return {
       user: result,
-      token,
+      accessToken,
+      refreshToken,
     };
   }
 
@@ -245,5 +250,41 @@ export class AuthService {
       isValid: errors.length === 0,
       errors,
     };
+  }
+
+  // Refresh Token을 사용한 Access Token 갱신
+  async refreshAccessToken(refreshToken: string) {
+    try {
+      // Refresh Token 검증
+      const decoded: JwtPayload = this.jwtService.verifyToken(refreshToken);
+
+      // 토큰 타입 확인
+      const tokenType = this.jwtService.getTokenType(refreshToken);
+      if (tokenType !== 'refresh') {
+        throw new UnauthorizedException('유효하지 않은 Refresh Token입니다.');
+      }
+
+      // 사용자 정보 조회 (완전한 User 객체로 조회)
+      const user = await this.userRepository.findOne({
+        where: { id: decoded.sub },
+      });
+
+      if (!user) {
+        throw new UnauthorizedException('사용자를 찾을 수 없습니다.');
+      }
+
+      // 새로운 Access Token 생성
+      const newAccessToken = this.jwtService.generateAccessToken(user);
+
+      // 비밀번호를 제외한 사용자 정보 반환
+      const { password: _, ...userWithoutPassword } = user;
+
+      return {
+        accessToken: newAccessToken,
+        user: userWithoutPassword,
+      };
+    } catch (error) {
+      throw new UnauthorizedException('Refresh Token이 유효하지 않습니다.');
+    }
   }
 }

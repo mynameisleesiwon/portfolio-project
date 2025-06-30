@@ -22,6 +22,7 @@ import { ProfileImageService } from './profile-image.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { DeleteAccountDto } from './dto/delete-account.dto';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Controller('auth') // '/auth' 경로로 시작하는 모든 요청을 처리
 export class AuthController {
@@ -39,7 +40,8 @@ export class AuthController {
     return {
       message: '회원가입이 성공적으로 완료되었습니다.',
       user: result.user,
-      token: result.token,
+      accessToken: result.accessToken,
+      refreshToken: result.refreshToken,
     };
   }
 
@@ -53,7 +55,8 @@ export class AuthController {
     return {
       message: '로그인이 성공적으로 완료되었습니다.',
       user: result.user,
-      token: result.token,
+      accessToken: result.accessToken,
+      refreshToken: result.refreshToken,
     };
   }
 
@@ -141,5 +144,20 @@ export class AuthController {
     );
 
     return result;
+  }
+
+  // Refresh Token을 사용한 Access Token 갱신 엔드포인트
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  async refreshToken(@Body() refreshTokenDto: RefreshTokenDto) {
+    const result = await this.authService.refreshAccessToken(
+      refreshTokenDto.refreshToken,
+    );
+
+    return {
+      message: 'Access Token이 성공적으로 갱신되었습니다.',
+      accessToken: result.accessToken,
+      user: result.user,
+    };
   }
 }
