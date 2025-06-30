@@ -3,9 +3,12 @@ import { motion } from 'framer-motion';
 import { User, Lock, Loader2, Eye, EyeOff, AtSign, Camera } from 'lucide-react';
 import { useAuth } from '../../hooks/Auth/useAuth';
 import type { SignUpRequest } from '../../types';
+import { validatePassword } from '../../utils/password-validator';
+import { useToastStore } from '../../store/toastStore';
 
 const SignUpForm = () => {
   const { signUp, isLoading } = useAuth();
+  const { addToast } = useToastStore();
 
   // 폼 상태 (텍스트 필드만)
   const [formData, setFormData] = useState<Omit<SignUpRequest, 'profileImage'>>(
@@ -45,6 +48,14 @@ const SignUpForm = () => {
   // 폼 제출 핸들러
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // 비밀번호 정책 검증
+    const passwordValidation = validatePassword(formData.password);
+    if (!passwordValidation.isValid) {
+      // 에러 메시지를 토스트로 표시
+      addToast('error', passwordValidation.errors.join(', '));
+      return;
+    }
 
     await signUp({
       ...formData,
@@ -178,7 +189,7 @@ const SignUpForm = () => {
             required
             autoComplete="off"
             className="w-full pl-10 pr-12 py-3 border border-border rounded-lg bg-card text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-            placeholder="비밀번호를 입력하세요 (6-20자)"
+            placeholder="비밀번호를 입력하세요 (8자 이상, 소문자+숫자+특수문자 포함)"
             disabled={isLoading}
           />
           <button

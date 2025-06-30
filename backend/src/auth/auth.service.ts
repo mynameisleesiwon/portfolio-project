@@ -43,6 +43,12 @@ export class AuthService {
       throw new ConflictException('이미 존재하는 닉네임입니다.');
     }
 
+    // 비밀번호 정책 검증
+    const passwordValidation = this.validatePassword(password);
+    if (!passwordValidation.isValid) {
+      throw new ConflictException(passwordValidation.errors.join(', '));
+    }
+
     // 비밀번호 해시화 (보안을 위해 평문 비밀번호를 암호화)
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -200,6 +206,44 @@ export class AuthService {
 
     return {
       message: '회원 탈퇴가 성공적으로 완료되었습니다.',
+    };
+  }
+
+  // 비밀번호 정책 검증을 위한 private 메서드
+  private validatePassword(password: string): {
+    isValid: boolean;
+    errors: string[];
+  } {
+    const errors: string[] = [];
+
+    // 최소 8자 이상
+    if (password.length < 8) {
+      errors.push('비밀번호는 최소 8자 이상이어야 합니다.');
+    }
+
+    // 최대 128자 이하
+    if (password.length > 128) {
+      errors.push('비밀번호는 최대 128자까지 가능합니다.');
+    }
+
+    // 소문자 1개 이상 포함
+    if (!/[a-z]/.test(password)) {
+      errors.push('비밀번호는 소문자를 1개 이상 포함해야 합니다.');
+    }
+
+    // 숫자 1개 이상 포함
+    if (!/\d/.test(password)) {
+      errors.push('비밀번호는 숫자를 1개 이상 포함해야 합니다.');
+    }
+
+    // 특수문자 1개 이상 포함
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+      errors.push('비밀번호는 특수문자를 1개 이상 포함해야 합니다.');
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
     };
   }
 }
