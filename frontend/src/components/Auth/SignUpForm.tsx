@@ -174,9 +174,12 @@ const SignUpForm = () => {
       <div>
         <label
           htmlFor="password"
-          className="block text-sm font-medium text-text mb-2"
+          className="flex items-center text-sm font-medium text-text mb-2"
         >
           비밀번호
+          <span className="text-xs text-muted-foreground font-normal ml-1">
+            (8자 이상, 소문자+숫자+특수문자 포함)
+          </span>
         </label>
         <div className="relative">
           <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-text-muted" />
@@ -189,7 +192,7 @@ const SignUpForm = () => {
             required
             autoComplete="off"
             className="w-full pl-10 pr-12 py-3 border border-border rounded-lg bg-card text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-            placeholder="비밀번호를 입력하세요 (8자 이상, 소문자+숫자+특수문자 포함)"
+            placeholder="비밀번호를 입력하세요"
             disabled={isLoading}
           />
           <button
