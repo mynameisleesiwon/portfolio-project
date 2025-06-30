@@ -5,7 +5,8 @@ import type { User } from '../types';
 interface AuthState {
   // 상태
   user: User | null;
-  token: string | null; // 토큰 상태 추가
+  accessToken: string | null; // Access Token
+  refreshToken: string | null; // Refresh Token
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
@@ -13,9 +14,11 @@ interface AuthState {
   // 액션
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
-  login: (user: User, token: string) => void; // 토큰 파라미터 추가
+  login: (user: User, accessToken: string, refreshToken: string) => void; // 두 토큰 모두 받기
   logout: () => void;
   clearError: () => void;
+  updateAccessToken: (accessToken: string) => void; // Access Token만 업데이트
+  updateUser: (user: User) => void; // 사용자 정보만 업데이트
 }
 
 // Auth 상태 관리 스토어
@@ -24,7 +27,8 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       // 초기 상태
       user: null,
-      token: null, // 토큰 초기 상태 추가
+      accessToken: null,
+      refreshToken: null,
       isAuthenticated: false,
       isLoading: false,
       error: null,
@@ -36,10 +40,11 @@ export const useAuthStore = create<AuthState>()(
       setError: (error) => set({ error }),
 
       // 로그인 (토큰 포함)
-      login: (user, token) =>
+      login: (user, accessToken, refreshToken) =>
         set({
           user,
-          token,
+          accessToken,
+          refreshToken,
           isAuthenticated: true,
           error: null,
         }),
@@ -48,9 +53,22 @@ export const useAuthStore = create<AuthState>()(
       logout: () =>
         set({
           user: null,
-          token: null, // 토큰도 제거
+          accessToken: null,
+          refreshToken: null,
           isAuthenticated: false,
           error: null,
+        }),
+
+      // Access Token만 업데이트 (토큰 갱신 시 사용)
+      updateAccessToken: (accessToken) =>
+        set({
+          accessToken,
+        }),
+
+      // 사용자 정보만 업데이트 (프로필 업데이트 시 사용)
+      updateUser: (user) =>
+        set({
+          user,
         }),
 
       // 에러 초기화
@@ -61,7 +79,8 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => ({
         // localStorage에 저장할 상태만 선택
         user: state.user,
-        token: state.token, // 토큰도 저장
+        accessToken: state.accessToken,
+        refreshToken: state.refreshToken, // Refresh Token도 저장
         isAuthenticated: state.isAuthenticated,
       }),
     }

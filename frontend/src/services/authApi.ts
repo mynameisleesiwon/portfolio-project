@@ -8,6 +8,7 @@ import type {
   UpdateProfileResponse,
   CheckNicknameResponse,
   DeleteAccountResponse,
+  RefreshTokenResponse,
 } from '../types';
 import { useAuthStore } from '../store/authStore';
 
@@ -23,9 +24,9 @@ const authApi = axios.create({
 // 요청 인터셉터 - 토큰 자동 첨부
 authApi.interceptors.request.use(
   (config) => {
-    const token = useAuthStore.getState().token;
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    const accessToken = useAuthStore.getState().accessToken;
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
   },
@@ -149,6 +150,23 @@ export const authApiService = {
       if (axios.isAxiosError(error)) {
         throw new Error(
           error.response?.data?.message || '회원 탈퇴 중 오류가 발생했습니다.'
+        );
+      }
+      throw error;
+    }
+  },
+
+  // 토큰 갱신 API
+  async refreshToken(refreshToken: string): Promise<RefreshTokenResponse> {
+    try {
+      const response = await authApi.post('/auth/refresh', {
+        refreshToken,
+      });
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(
+          error.response?.data?.message || '토큰 갱신 중 오류가 발생했습니다.'
         );
       }
       throw error;

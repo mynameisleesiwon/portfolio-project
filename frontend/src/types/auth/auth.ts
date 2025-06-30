@@ -26,7 +26,20 @@ export interface User {
 export interface AuthResponse {
   message: string;
   user: User;
-  token: string; // 토큰 필드 추가
+  accessToken: string; // Access Token
+  refreshToken: string; // Refresh Token
+}
+
+// 토큰 갱신 요청 타입
+export interface RefreshTokenRequest {
+  refreshToken: string;
+}
+
+// 토큰 갱신 응답 타입
+export interface RefreshTokenResponse {
+  message: string;
+  accessToken: string;
+  user: User;
 }
 
 // 보호된 API 응답 타입 (프로필 조회용)
