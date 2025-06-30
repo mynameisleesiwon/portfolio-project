@@ -40,7 +40,18 @@ export const authApiService = {
   // 회원가입 API
   async signUp(userData: SignUpRequest): Promise<AuthResponse> {
     try {
-      const response = await authApi.post('/auth/signup', userData);
+      const formData = new FormData();
+      formData.append('userId', userData.userId);
+      formData.append('password', userData.password);
+      formData.append('nickname', userData.nickname);
+
+      if (userData.profileImage) {
+        formData.append('profileImage', userData.profileImage);
+      }
+
+      const response = await authApi.post('/auth/signup', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {

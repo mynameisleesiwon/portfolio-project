@@ -36,22 +36,9 @@ export const useAuth = () => {
       setLoading(true);
       setError(null);
 
-      // 이미지 업로드가 있는 경우 먼저 처리
-      let profileImageUrl: string | undefined = undefined;
-      if (userData.profileImage instanceof File) {
-        profileImageUrl = await authApiService.uploadProfileImage(
-          userData.profileImage
-        );
-      } else {
-        profileImageUrl = userData.profileImage || undefined;
-      }
+      const response: AuthResponse = await authApiService.signUp(userData);
 
-      const response: AuthResponse = await authApiService.signUp({
-        ...userData,
-        profileImage: profileImageUrl,
-      });
-
-      login(response.user, response.accessToken, response.refreshToken); // 두 토큰 모두 저장
+      login(response.user, response.accessToken, response.refreshToken);
       addToast('success', '회원가입에 성공했습니다!');
       navigate('/');
     } catch (error) {

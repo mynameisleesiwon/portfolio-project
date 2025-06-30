@@ -3,7 +3,7 @@ export interface SignUpRequest {
   userId: string;
   password: string;
   nickname: string;
-  profileImage?: string | null | File;
+  profileImage?: File; // File 객체만 허용
 }
 
 // 로그인 요청 데이터 타입
