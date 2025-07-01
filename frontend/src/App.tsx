@@ -19,6 +19,7 @@ import { useToastStore } from './store/toastStore';
 import ProtectedRoute from './common/components/ProtectedRoute';
 import Profile from './pages/profile';
 import ProfileEdit from './pages/profile/edit';
+import FeedDemo from './pages/demos/Feed/FeedDemo';
 
 function App() {
   const location = useLocation();
@@ -77,6 +78,8 @@ function App() {
             <Route path="/tech-demo/board/:id" element={<BoardDetail />} />
             {/* 슬라이더 */}
             <Route path="/tech-demo/slider" element={<SliderDemo />} />
+            {/* 피드 */}
+            <Route path="/tech-demo/feed" element={<FeedDemo />} />
             {/* 404페이지 */}
             <Route path="*" element={<NotFound />} />
           </Routes>

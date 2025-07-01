@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Book, Play } from 'lucide-react';
+import { Book, MessageCircle, Play } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import type { DemoCardType } from '../types';
 import DemoCardSection from '../components/TechDemo/DemoCardSection';
@@ -63,6 +63,31 @@ const TechDemo = () => {
         '반응형 브레이크포인트',
       ],
       route: '/tech-demo/slider',
+    },
+    {
+      id: 'feed',
+      title: '소셜 피드',
+      description: 'NestJS 기반 소셜 피드 시스템 (인증 기반)',
+      detailDescription:
+        'NestJS 백엔드와 연동된 소셜 피드 시스템입니다. JWT 인증을 활용하여 사용자별 피드를 제공하고, 피드 작성, 좋아요, 댓글 기능을 구현했습니다. 실시간 데이터 업데이트와 반응형 디자인으로 모던한 소셜 미디어 경험을 제공합니다.',
+      icon: <MessageCircle className="w-8 h-8" />,
+      status: 'coming-soon',
+      techStack: [
+        'React',
+        'TypeScript',
+        'NestJS',
+        'PostgreSQL',
+        'JWT',
+        'Tailwind CSS',
+      ],
+      features: [
+        '피드 CRUD 기능',
+        '좋아요 시스템',
+        '댓글 시스템',
+        '사용자별 피드',
+        '실시간 업데이트',
+      ],
+      route: '/tech-demo/feed',
     },
   ];
 
