@@ -2,6 +2,9 @@ import { motion } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useFeeds } from '../../../hooks/Feed/useFeeds';
+import LoadingSpinner from '../../../common/components/LoadingSpinner';
+import ErrorMessage from '../../../common/components/ErrorMessage';
 
 const techTags = [
   'React',
@@ -13,6 +16,8 @@ const techTags = [
 ];
 
 const FeedDemo = () => {
+  const { feeds, isLoading, error, refetch } = useFeeds();
+
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);
@@ -58,12 +63,83 @@ const FeedDemo = () => {
 
       {/* 메인 콘텐츠 */}
       <motion.div
-        className="bg-card border border-border rounded-lg p-6 min-h-[200px] flex items-center justify-center"
+        className="bg-card border border-border rounded-lg p-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.2 }}
       >
-        <span className="text-lg text-text/60">🚧 곧 공개될 예정입니다!</span>
+        {/* 로딩 상태 */}
+        {isLoading && (
+          <div className="flex justify-center py-8">
+            <LoadingSpinner />
+          </div>
+        )}
+
+        {/* 에러 상태 */}
+        {error && (
+          <div className="py-8">
+            <ErrorMessage message={error} onRetry={refetch} />
+          </div>
+        )}
+
+        {/* 피드 목록 */}
+        {!isLoading && !error && (
+          <div className="space-y-4">
+            {feeds.length === 0 ? (
+              <div className="text-center py-8 text-text/60">
+                <MessageCircle className="w-12 h-12 mx-auto mb-4 text-text/40" />
+                <p className="text-lg font-medium mb-2">아직 피드가 없습니다</p>
+                <p className="text-sm">첫 번째 피드를 작성해보세요!</p>
+              </div>
+            ) : (
+              feeds.map((feed) => (
+                <div
+                  key={feed.id}
+                  className="border border-border rounded-lg p-4 hover:bg-bg-secondary transition-colors"
+                >
+                  <div className="flex items-start space-x-3">
+                    {/* 사용자 아바타 */}
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
+                      {feed.user.profileImage ? (
+                        <img
+                          src={feed.user.profileImage}
+                          alt={feed.user.nickname}
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                      ) : (
+                        feed.user.nickname.charAt(0).toUpperCase()
+                      )}
+                    </div>
+
+                    {/* 피드 내용 */}
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <span className="font-semibold text-text">
+                          {feed.user.nickname}
+                        </span>
+                        <span className="text-xs text-text/60">
+                          {new Date(feed.createdAt).toLocaleDateString(
+                            'ko-KR',
+                            {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            }
+                          )}
+                        </span>
+                      </div>
+                      <p className="text-text/80 leading-relaxed whitespace-pre-wrap">
+                        {feed.content}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )}
       </motion.div>
 
       {/* 하단 버튼 */}
