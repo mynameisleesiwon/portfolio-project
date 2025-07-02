@@ -3,8 +3,10 @@ import { MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useFeeds } from '../../../hooks/Feed/useFeeds';
+import { useAuthStore } from '../../../store/authStore';
 import LoadingSpinner from '../../../common/components/LoadingSpinner';
 import ErrorMessage from '../../../common/components/ErrorMessage';
+import CreateFeed from '../../../components/TechDemo/Feed/CreateFeed';
 
 const techTags = [
   'React',
@@ -17,10 +19,16 @@ const techTags = [
 
 const FeedDemo = () => {
   const { feeds, isLoading, error, refetch } = useFeeds();
+  const { isAuthenticated } = useAuthStore();
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);
+
+  // 피드 작성 성공 시 처리
+  const handleFeedCreated = () => {
+    refetch(); // 피드 목록 새로고침
+  };
 
   return (
     <div className="max-w-screen-lg mx-auto w-full px-2 py-6">
@@ -68,6 +76,29 @@ const FeedDemo = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.2 }}
       >
+        {/* 피드 작성 폼 - 로그인한 유저에게만 표시 */}
+        {isAuthenticated && <CreateFeed onSuccess={handleFeedCreated} />}
+
+        {/* 로그인 안내 */}
+        {!isAuthenticated && (
+          <motion.div
+            className="mb-6 p-4 bg-bg-secondary border border-border rounded-lg text-center"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <p className="text-text/70 mb-2">
+              피드를 작성하려면 로그인이 필요합니다.
+            </p>
+            <Link
+              to="/auth/signin"
+              className="inline-flex items-center space-x-1 text-primary hover:text-primary-hover transition-colors"
+            >
+              <span>로그인하기</span>
+            </Link>
+          </motion.div>
+        )}
+
         {/* 로딩 상태 */}
         {isLoading && (
           <div className="flex justify-center py-8">
@@ -89,7 +120,11 @@ const FeedDemo = () => {
               <div className="text-center py-8 text-text/60">
                 <MessageCircle className="w-12 h-12 mx-auto mb-4 text-text/40" />
                 <p className="text-lg font-medium mb-2">아직 피드가 없습니다</p>
-                <p className="text-sm">첫 번째 피드를 작성해보세요!</p>
+                <p className="text-sm">
+                  {isAuthenticated
+                    ? '첫 번째 피드를 작성해보세요!'
+                    : '로그인하고 첫 번째 피드를 작성해보세요!'}
+                </p>
               </div>
             ) : (
               feeds.map((feed) => (
@@ -100,15 +135,11 @@ const FeedDemo = () => {
                   <div className="flex items-start space-x-3">
                     {/* 사용자 아바타 */}
                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
-                      {feed.user.profileImage ? (
-                        <img
-                          src={feed.user.profileImage}
-                          alt={feed.user.nickname}
-                          className="w-10 h-10 rounded-full object-cover"
-                        />
-                      ) : (
-                        feed.user.nickname.charAt(0).toUpperCase()
-                      )}
+                      <img
+                        src={feed.user?.profileImage || '/default-profile.png'}
+                        alt="프로필"
+                        className="w-10 h-10 rounded-full object-cover border border-primary"
+                      />
                     </div>
 
                     {/* 피드 내용 */}

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { FeedsResponse } from '../types';
+import type { CreateFeedResponse, FeedsResponse } from '../types';
 import { useAuthStore } from '../store/authStore';
 
 // axios 인스턴스 생성
@@ -37,6 +37,21 @@ export const feedApiService = {
         throw new Error(
           error.response?.data?.message ||
             '피드 목록 조회 중 오류가 발생했습니다.'
+        );
+      }
+      throw error;
+    }
+  },
+
+  // 피드 생성 API
+  async createFeed(content: string): Promise<CreateFeedResponse> {
+    try {
+      const response = await feedApi.post('/feeds', { content });
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(
+          error.response?.data?.message || '피드 작성 중 오류가 발생했습니다.'
         );
       }
       throw error;
