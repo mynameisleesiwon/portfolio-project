@@ -33,17 +33,6 @@ export class Feed {
   @CreateDateColumn({
     name: 'created_at', // 데이터베이스 컬럼명
     type: 'timestamp', // 타임스탬프 타입
-    transformer: {
-      to: (value: Date) => value, // 데이터베이스에 저장할 때는 그대로
-      from: (value: Date) => {
-        if (value) {
-          // 데이터베이스에서 조회할 때 UTC를 한국 시간으로 변환
-          const koreanTime = new Date(value.getTime() + 9 * 60 * 60 * 1000);
-          return koreanTime;
-        }
-        return value;
-      },
-    },
   })
   createdAt: Date;
 
@@ -51,17 +40,6 @@ export class Feed {
   @UpdateDateColumn({
     name: 'updated_at', // 데이터베이스 컬럼명
     type: 'timestamp', // 타임스탬프 타입
-    transformer: {
-      to: (value: Date) => value, // 데이터베이스에 저장할 때는 그대로
-      from: (value: Date) => {
-        if (value) {
-          // 데이터베이스에서 조회할 때 UTC를 한국 시간으로 변환
-          const koreanTime = new Date(value.getTime() + 9 * 60 * 60 * 1000);
-          return koreanTime;
-        }
-        return value;
-      },
-    },
   })
   updatedAt: Date;
 }

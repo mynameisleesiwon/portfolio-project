@@ -19,4 +19,13 @@ export class FeedService {
       },
     });
   }
+
+  // 새로운 피드 생성
+  async create(content: string, userId: number): Promise<Feed> {
+    const feed = this.feedRepository.create({
+      content,
+      userId,
+    });
+    return this.feedRepository.save(feed);
+  }
 }
