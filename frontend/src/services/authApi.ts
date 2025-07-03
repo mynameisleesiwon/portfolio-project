@@ -10,29 +10,18 @@ import type {
   DeleteAccountResponse,
   RefreshTokenResponse,
 } from '../types';
-import { useAuthStore } from '../store/authStore';
+import { createApiClient } from '../utils/apiClient';
 
-// axios 인스턴스 생성
-const authApi = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_API_URL || 'http://localhost:3000', // 환경변수에서 백엔드 URL 가져오기
-  timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+// 토큰이 필요한 API용 클라이언트
+const authApi = createApiClient(
+  import.meta.env.VITE_BACKEND_API_URL || 'http://localhost:3000',
+  { requireAuth: true }
+);
 
-// 요청 인터셉터 - 토큰 자동 첨부
-authApi.interceptors.request.use(
-  (config) => {
-    const accessToken = useAuthStore.getState().accessToken;
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
+// 토큰이 불필요한 API용 클라이언트 (회원가입, 로그인, 닉네임 체크 등)
+const publicAuthApi = createApiClient(
+  import.meta.env.VITE_BACKEND_API_URL || 'http://localhost:3000',
+  { requireAuth: false }
 );
 
 // Auth API 클래스
@@ -49,7 +38,7 @@ export const authApiService = {
         formData.append('profileImage', userData.profileImage);
       }
 
-      const response = await authApi.post('/auth/signup', formData, {
+      const response = await publicAuthApi.post('/auth/signup', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       return response.data;
@@ -66,7 +55,7 @@ export const authApiService = {
   // 로그인 API
   async signIn(userData: SignInRequest): Promise<AuthResponse> {
     try {
-      const response = await authApi.post('/auth/signin', userData);
+      const response = await publicAuthApi.post('/auth/signin', userData);
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -95,7 +84,7 @@ export const authApiService = {
     formData.append('file', file);
 
     try {
-      const response = await authApi.post(
+      const response = await publicAuthApi.post(
         '/auth/upload-profile-image',
         formData,
         {
@@ -135,7 +124,7 @@ export const authApiService = {
   // 닉네임 중복 검사 API
   async checkNickname(nickname: string): Promise<CheckNicknameResponse> {
     try {
-      const response = await authApi.get(
+      const response = await publicAuthApi.get(
         `/auth/check-nickname?nickname=${encodeURIComponent(nickname)}`
       );
       return response.data;
@@ -170,7 +159,7 @@ export const authApiService = {
   // 토큰 갱신 API
   async refreshToken(refreshToken: string): Promise<RefreshTokenResponse> {
     try {
-      const response = await authApi.post('/auth/refresh', {
+      const response = await publicAuthApi.post('/auth/refresh', {
         refreshToken,
       });
       return response.data;
@@ -184,5 +173,3 @@ export const authApiService = {
     }
   },
 };
-
-export default authApi;

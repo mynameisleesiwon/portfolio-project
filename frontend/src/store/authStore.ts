@@ -19,6 +19,8 @@ interface AuthState {
   clearError: () => void;
   updateAccessToken: (accessToken: string) => void; // Access Token만 업데이트
   updateUser: (user: User) => void; // 사용자 정보만 업데이트
+  shouldRedirect: boolean;
+  setShouldRedirect: (should: boolean) => void;
 }
 
 // Auth 상태 관리 스토어
@@ -32,6 +34,7 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       isLoading: false,
       error: null,
+      shouldRedirect: false,
 
       // 로딩 상태 설정
       setLoading: (isLoading) => set({ isLoading }),
@@ -57,6 +60,7 @@ export const useAuthStore = create<AuthState>()(
           refreshToken: null,
           isAuthenticated: false,
           error: null,
+          shouldRedirect: false,
         }),
 
       // Access Token만 업데이트 (토큰 갱신 시 사용)
@@ -73,6 +77,9 @@ export const useAuthStore = create<AuthState>()(
 
       // 에러 초기화
       clearError: () => set({ error: null }),
+
+      // 리다이렉트 설정
+      setShouldRedirect: (should) => set({ shouldRedirect: should }),
     }),
     {
       name: 'auth-storage', // localStorage 키 이름

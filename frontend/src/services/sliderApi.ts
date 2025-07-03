@@ -1,17 +1,12 @@
 import axios from 'axios';
 import type { TMDBResponse } from '../types';
+import { createApiClient } from '../utils/apiClient';
 
 const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // axios 인스턴스 생성
-const tmdb_api = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+const tmdb_api = createApiClient(API_BASE_URL, { requireAuth: false });
 
 // TMDB API 클래스
 export const sliderApi = {

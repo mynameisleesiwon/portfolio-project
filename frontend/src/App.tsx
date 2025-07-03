@@ -1,6 +1,6 @@
 import './App.css';
 import { AnimatePresence } from 'framer-motion';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Home from './pages/Home';
 import TechDemo from './pages/TechDemo';
 import NotFound from './pages/NotFound';
@@ -20,14 +20,28 @@ import ProtectedRoute from './common/components/ProtectedRoute';
 import Profile from './pages/profile';
 import ProfileEdit from './pages/profile/edit';
 import FeedDemo from './pages/demos/Feed/FeedDemo';
+import { useAuthStore } from './store/authStore';
+import { useEffect } from 'react';
 
 function App() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // 리다이렉트 상태 감지
+  const shouldRedirect = useAuthStore((state) => state.shouldRedirect);
 
   // Auth 페이지인지 확인 (로그인/회원가입 페이지)
   const isAuthPage = location.pathname.startsWith('/auth');
 
   const { toasts, removeToast } = useToastStore();
+
+  // 리다이렉트 처리
+  useEffect(() => {
+    if (shouldRedirect) {
+      navigate('/auth/signin');
+      useAuthStore.getState().setShouldRedirect(false);
+    }
+  }, [shouldRedirect, navigate]);
 
   return (
     <div
