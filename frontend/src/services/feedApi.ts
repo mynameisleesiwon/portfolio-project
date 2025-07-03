@@ -1,5 +1,10 @@
 import axios from 'axios';
-import type { CreateFeedResponse, FeedsResponse } from '../types';
+import type {
+  CreateFeedResponse,
+  DeleteFeedResponse,
+  FeedsResponse,
+  UpdateFeedResponse,
+} from '../types';
 import { useAuthStore } from '../store/authStore';
 
 // axios 인스턴스 생성
@@ -52,6 +57,36 @@ export const feedApiService = {
       if (axios.isAxiosError(error)) {
         throw new Error(
           error.response?.data?.message || '피드 작성 중 오류가 발생했습니다.'
+        );
+      }
+      throw error;
+    }
+  },
+
+  // 피드 수정 API
+  async updateFeed(id: string, content: string): Promise<UpdateFeedResponse> {
+    try {
+      const response = await feedApi.put(`/feeds/${id}`, { content });
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(
+          error.response?.data?.message || '피드 수정 중 오류가 발생했습니다.'
+        );
+      }
+      throw error;
+    }
+  },
+
+  // 피드 삭제 API
+  async deleteFeed(id: string): Promise<DeleteFeedResponse> {
+    try {
+      const response = await feedApi.delete(`/feeds/${id}`);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(
+          error.response?.data?.message || '피드 삭제 중 오류가 발생했습니다.'
         );
       }
       throw error;

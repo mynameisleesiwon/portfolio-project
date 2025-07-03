@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFeeds } from '../../../hooks/Feed/useFeeds';
 import { useAuthStore } from '../../../store/authStore';
 import LoadingSpinner from '../../../common/components/LoadingSpinner';
 import ErrorMessage from '../../../common/components/ErrorMessage';
 import CreateFeed from '../../../components/TechDemo/Feed/CreateFeed';
+import FeedItem from '../../../components/TechDemo/Feed/FeedItem';
 
 const techTags = [
   'React',
@@ -20,6 +21,7 @@ const techTags = [
 const FeedDemo = () => {
   const { feeds, isLoading, error, refetch } = useFeeds();
   const { isAuthenticated } = useAuthStore();
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -28,6 +30,16 @@ const FeedDemo = () => {
   // 피드 작성 성공 시 처리
   const handleFeedCreated = () => {
     refetch(); // 피드 목록 새로고침
+  };
+
+  // 메뉴 열기/닫기 처리
+  const handleMenuToggle = (feedId: string) => {
+    setOpenMenuId(openMenuId === feedId ? null : feedId);
+  };
+
+  // 메뉴 닫기 처리
+  const handleMenuClose = () => {
+    setOpenMenuId(null);
   };
 
   return (
@@ -128,45 +140,15 @@ const FeedDemo = () => {
               </div>
             ) : (
               feeds.map((feed) => (
-                <div
+                <FeedItem
                   key={feed.id}
-                  className="border border-border rounded-lg p-4 hover:bg-bg-secondary transition-colors"
-                >
-                  <div className="flex items-start space-x-3">
-                    {/* 사용자 아바타 */}
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
-                      <img
-                        src={feed.user?.profileImage || '/default-profile.png'}
-                        alt="프로필"
-                        className="w-10 h-10 rounded-full object-cover border border-primary"
-                      />
-                    </div>
-
-                    {/* 피드 내용 */}
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <span className="font-semibold text-text">
-                          {feed.user.nickname}
-                        </span>
-                        <span className="text-xs text-text/60">
-                          {new Date(feed.createdAt).toLocaleDateString(
-                            'ko-KR',
-                            {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            }
-                          )}
-                        </span>
-                      </div>
-                      <p className="text-text/80 leading-relaxed whitespace-pre-wrap">
-                        {feed.content}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                  feed={feed}
+                  onUpdate={refetch}
+                  onDelete={refetch}
+                  isMenuOpen={openMenuId === feed.id}
+                  onMenuToggle={() => handleMenuToggle(feed.id)}
+                  onMenuClose={handleMenuClose}
+                />
               ))
             )}
           </div>

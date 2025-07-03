@@ -21,13 +21,19 @@ export interface FeedsResponse {
   feeds: Feed[];
 }
 
-// 피드 생성 요청 타입
-export interface CreateFeedRequest {
-  content: string;
-}
-
 // 피드 생성 응답 타입
 export interface CreateFeedResponse {
   message: string;
   feed: Feed;
+}
+
+// 피드 수정 응답 타입
+export interface UpdateFeedResponse {
+  message: string;
+  feed: Feed;
+}
+
+// 피드 삭제 응답 타입
+export interface DeleteFeedResponse {
+  message: string;
 }
