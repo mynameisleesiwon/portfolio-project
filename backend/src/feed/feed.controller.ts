@@ -1,10 +1,13 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
+  Put,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -36,6 +39,45 @@ export class FeedController {
     return {
       message: '피드가 성공적으로 생성되었습니다.',
       feed,
+    };
+  }
+
+  // 단일 피드 조회 API
+  @Get(':id') // GET /feeds/:id
+  async getFeed(@Param('id') id: string) {
+    const feed = await this.feedService.findOne(id);
+
+    return {
+      message: '피드 조회가 성공적으로 완료되었습니다.',
+      feed,
+    };
+  }
+
+  // 피드 수정 API (인증 필요)
+  @Put(':id') // PUT /feeds/:id
+  @UseGuards(JwtAuthGuard)
+  async updateFeed(
+    @Param('id') id: string,
+    @Body() body: { content: string },
+    @Req() req,
+  ) {
+    const feed = await this.feedService.update(id, body.content, req.user.id);
+
+    return {
+      message: '피드가 성공적으로 수정되었습니다.',
+      feed,
+    };
+  }
+
+  // 피드 삭제 API (인증 필요)
+  @Delete(':id') // DELETE /feeds/:id
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.NO_CONTENT) // 204 상태 코드 반환
+  async deleteFeed(@Param('id') id: string, @Req() req) {
+    await this.feedService.delete(id, req.user.id);
+
+    return {
+      message: '피드가 성공적으로 삭제되었습니다.',
     };
   }
 }
