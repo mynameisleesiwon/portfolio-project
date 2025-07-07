@@ -15,6 +15,7 @@ export const createApiClient = (
   const client = axios.create({
     baseURL,
     timeout,
+    withCredentials: true,
     headers: {
       'Content-Type': 'application/json',
     },
@@ -46,22 +47,17 @@ export const createApiClient = (
           originalRequest._retry = true;
 
           try {
-            const refreshToken = useAuthStore.getState().refreshToken;
-            if (refreshToken) {
-              const response = await authApiService.refreshToken(refreshToken);
-              useAuthStore.getState().updateAccessToken(response.accessToken);
+            // 쿠키에서 자동으로 Refresh Token이 전송되므로 별도 전송 불필요
+            const response = await authApiService.refreshToken();
+            useAuthStore.getState().updateAccessToken(response.accessToken);
 
-              // 원래 요청 재시도
-              originalRequest.headers.Authorization = `Bearer ${response.accessToken}`;
-              return client(originalRequest);
-            }
+            // 원래 요청 재시도
+            originalRequest.headers.Authorization = `Bearer ${response.accessToken}`;
+            return client(originalRequest);
           } catch (refreshError) {
             // refresh token도 만료된 경우 로그아웃 처리
             useAuthStore.getState().logout();
-
-            // 리다이렉트 플래그 설정
             useAuthStore.getState().setShouldRedirect(true);
-
             throw new Error('세션이 만료되었습니다. 다시 로그인해주세요.');
           }
         }

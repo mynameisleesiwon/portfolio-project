@@ -156,17 +156,30 @@ export const authApiService = {
     }
   },
 
-  // 토큰 갱신 API
-  async refreshToken(refreshToken: string): Promise<RefreshTokenResponse> {
+  // 토큰 갱신 API (쿠키에서 자동으로 Refresh Token 전송)
+  async refreshToken(): Promise<RefreshTokenResponse> {
     try {
-      const response = await publicAuthApi.post('/auth/refresh', {
-        refreshToken,
-      });
+      const response = await publicAuthApi.post('/auth/refresh');
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         throw new Error(
           error.response?.data?.message || '토큰 갱신 중 오류가 발생했습니다.'
+        );
+      }
+      throw error;
+    }
+  },
+
+  // 로그아웃 API
+  async logout(): Promise<{ message: string }> {
+    try {
+      const response = await authApi.post('/auth/logout');
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(
+          error.response?.data?.message || '로그아웃 중 오류가 발생했습니다.'
         );
       }
       throw error;

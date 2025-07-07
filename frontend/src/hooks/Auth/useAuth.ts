@@ -38,7 +38,8 @@ export const useAuth = () => {
 
       const response: AuthResponse = await authApiService.signUp(userData);
 
-      login(response.user, response.accessToken, response.refreshToken);
+      // Access Token만 저장 (Refresh Token은 쿠키에서 관리)
+      login(response.user, response.accessToken);
       addToast('success', '회원가입에 성공했습니다!');
       navigate('/');
     } catch (error) {
@@ -59,7 +60,9 @@ export const useAuth = () => {
       setError(null);
 
       const response: AuthResponse = await authApiService.signIn(userData);
-      login(response.user, response.accessToken, response.refreshToken); // 두 토큰 모두 저장
+
+      // Access Token만 저장 (Refresh Token은 쿠키에서 관리)
+      login(response.user, response.accessToken);
       addToast('success', '로그인에 성공했습니다!');
       navigate('/');
     } catch (error) {
@@ -74,13 +77,21 @@ export const useAuth = () => {
   };
 
   // 로그아웃 함수
-  const signOut = () => {
-    logout(); // Auth Store에서 로그아웃 처리 (토큰도 제거됨)
-    addToast('success', '로그아웃되었습니다.');
-    navigate('/');
+  const signOut = async () => {
+    try {
+      // 백엔드에 로그아웃 요청 (쿠키 삭제)
+      await authApiService.logout();
+    } catch (error) {
+      console.error('로그아웃 API 호출 실패:', error);
+    } finally {
+      // 프론트엔드 상태 정리
+      logout();
+      addToast('success', '로그아웃되었습니다.');
+      navigate('/');
+    }
   };
 
-  // useAuth.ts - getProfile 함수 수정
+  // 프로필 조회 함수
   const getProfile = async (): Promise<ProfileResponse> => {
     try {
       const response = await authApiService.getProfile();
@@ -148,15 +159,10 @@ export const useAuth = () => {
     }
   };
 
-  // 토큰 갱신 함수
+  // 토큰 갱신 함수 (쿠키에서 자동으로 Refresh Token 전송)
   const refreshAccessToken = async () => {
     try {
-      const refreshToken = useAuthStore.getState().refreshToken;
-      if (!refreshToken) {
-        throw new Error('Refresh Token이 없습니다.');
-      }
-
-      const response = await authApiService.refreshToken(refreshToken);
+      const response = await authApiService.refreshToken();
 
       // 새로운 Access Token으로 업데이트
       useAuthStore.getState().updateAccessToken(response.accessToken);
@@ -188,6 +194,6 @@ export const useAuth = () => {
     clearError,
     updateProfile,
     checkNickname,
-    refreshAccessToken, // 추가
+    refreshAccessToken,
   };
 };

@@ -5,8 +5,7 @@ import type { User } from '../types';
 interface AuthState {
   // 상태
   user: User | null;
-  accessToken: string | null; // Access Token
-  refreshToken: string | null; // Refresh Token
+  accessToken: string | null; // Access Token만 메모리에 저장
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
@@ -14,11 +13,11 @@ interface AuthState {
   // 액션
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
-  login: (user: User, accessToken: string, refreshToken: string) => void; // 두 토큰 모두 받기
+  login: (user: User, accessToken: string) => void; // Refresh Token은 쿠키에서 관리
   logout: () => void;
   clearError: () => void;
-  updateAccessToken: (accessToken: string) => void; // Access Token만 업데이트
-  updateUser: (user: User) => void; // 사용자 정보만 업데이트
+  updateAccessToken: (accessToken: string) => void;
+  updateUser: (user: User) => void;
   shouldRedirect: boolean;
   setShouldRedirect: (should: boolean) => void;
 }
@@ -29,8 +28,7 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       // 초기 상태
       user: null,
-      accessToken: null,
-      refreshToken: null,
+      accessToken: null, // 메모리에만 저장
       isAuthenticated: false,
       isLoading: false,
       error: null,
@@ -42,12 +40,11 @@ export const useAuthStore = create<AuthState>()(
       // 에러 설정
       setError: (error) => set({ error }),
 
-      // 로그인 (토큰 포함)
-      login: (user, accessToken, refreshToken) =>
+      // 로그인 (Access Token만 저장)
+      login: (user, accessToken) =>
         set({
           user,
           accessToken,
-          refreshToken,
           isAuthenticated: true,
           error: null,
         }),
@@ -57,7 +54,6 @@ export const useAuthStore = create<AuthState>()(
         set({
           user: null,
           accessToken: null,
-          refreshToken: null,
           isAuthenticated: false,
           error: null,
           shouldRedirect: false,
@@ -82,13 +78,12 @@ export const useAuthStore = create<AuthState>()(
       setShouldRedirect: (should) => set({ shouldRedirect: should }),
     }),
     {
-      name: 'auth-storage', // localStorage 키 이름
+      name: 'auth-storage',
       partialize: (state) => ({
-        // localStorage에 저장할 상태만 선택
+        // localStorage에 저장할 상태만 선택 (Access Token 제외)
         user: state.user,
-        accessToken: state.accessToken,
-        refreshToken: state.refreshToken, // Refresh Token도 저장
         isAuthenticated: state.isAuthenticated,
+        // accessToken은 localStorage에 저장하지 않음 (메모리만)
       }),
     }
   )
