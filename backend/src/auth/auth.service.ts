@@ -284,7 +284,7 @@ export class AuthService {
         throw new UnauthorizedException('유효하지 않은 Refresh Token입니다.');
       }
 
-      // 사용자 정보 조회 (완전한 User 객체로 조회)
+      // 사용자 정보 조회
       const user = await this.userRepository.findOne({
         where: { id: decoded.sub },
       });

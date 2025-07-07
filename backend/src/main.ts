@@ -3,10 +3,14 @@ import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express'; // 추가
 import { join } from 'path'; // 추가
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   // NestExpressApplication 타입으로 앱 생성
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  // 쿠키 파서 미들웨어 추가
+  app.use(cookieParser());
 
   // CORS 설정
   app.enableCors({
