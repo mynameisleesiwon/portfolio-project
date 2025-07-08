@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Edit, Trash2, MoreVertical } from 'lucide-react';
-import { useAuthStore } from '../../../store/authStore';
+import { Edit, Trash2, MoreVertical, Heart } from 'lucide-react';
+import { useAuth } from '../../../hooks/Auth/useAuth';
 import { useUpdateFeed } from '../../../hooks/Feed/useUpdateFeed';
 import { useDeleteFeed } from '../../../hooks/Feed/useDeleteFeed';
 import { useConfirm } from '../../../hooks/useConfirm';
 import ConfirmModal from '../../../common/components/ConfirmModal';
 import type { Feed } from '../../../types';
+import { useToggleLike } from '../../../hooks/Feed/useToggleLike';
 
 interface FeedItemProps {
   feed: Feed;
@@ -27,9 +28,16 @@ const FeedItem = ({
 }: FeedItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [content, setContent] = useState(feed.content);
-  const { user } = useAuthStore();
+
+  const [likeCount, setLikeCount] = useState(feed.likeCount || 0);
+  const [isLiked, setIsLiked] = useState(feed.isLiked || false);
+
+  const { user } = useAuth();
   const { updateFeed, isLoading: isUpdating } = useUpdateFeed();
   const { deleteFeed, isLoading: isDeleting } = useDeleteFeed();
+
+  const { toggleLike, isLoading: isLiking } = useToggleLike();
+
   const {
     isOpen: isConfirmOpen,
     confirm,
@@ -74,6 +82,15 @@ const FeedItem = ({
     setContent(feed.content);
     setIsEditing(false);
     onMenuClose();
+  };
+
+  // 좋아요 토글 핸들러
+  const handleToggleLike = async () => {
+    const result = await toggleLike(feed.id);
+    if (result) {
+      setIsLiked(result.isLiked);
+      setLikeCount(result.likeCount);
+    }
   };
 
   return (
@@ -198,9 +215,31 @@ const FeedItem = ({
               </div>
             </div>
           ) : (
-            <p className="text-text/80 leading-relaxed whitespace-pre-wrap">
-              {feed.content}
-            </p>
+            <div>
+              <p className="text-text/80 leading-relaxed whitespace-pre-wrap mb-3">
+                {feed.content}
+              </p>
+
+              {/* 좋아요 버튼 */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleToggleLike}
+                  disabled={isLiking}
+                  className={`flex items-center gap-1 px-3 py-1.5 rounded-lg transition-all duration-200 ${
+                    isLiked
+                      ? 'bg-red-500/10 text-red-500 hover:bg-red-500/20'
+                      : 'bg-bg-secondary text-text/60 hover:bg-bg-secondary/80'
+                  } hover:scale-105`}
+                >
+                  <Heart
+                    className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`}
+                  />
+                  <span className="text-sm font-medium">
+                    {likeCount > 0 ? likeCount : ''}
+                  </span>
+                </button>
+              </div>
+            </div>
           )}
         </div>
       </div>

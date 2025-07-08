@@ -3,7 +3,6 @@ import { MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useFeeds } from '../../../hooks/Feed/useFeeds';
-import { useAuthStore } from '../../../store/authStore';
 import LoadingSpinner from '../../../common/components/LoadingSpinner';
 import ErrorMessage from '../../../common/components/ErrorMessage';
 import CreateFeed from '../../../components/TechDemo/Feed/CreateFeed';
@@ -20,7 +19,6 @@ const techTags = [
 
 const FeedDemo = () => {
   const { feeds, isLoading, error, refetch } = useFeeds();
-  const { isAuthenticated } = useAuthStore();
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -88,28 +86,8 @@ const FeedDemo = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.2 }}
       >
-        {/* 피드 작성 폼 - 로그인한 유저에게만 표시 */}
-        {isAuthenticated && <CreateFeed onSuccess={handleFeedCreated} />}
-
-        {/* 로그인 안내 */}
-        {!isAuthenticated && (
-          <motion.div
-            className="mb-6 p-4 bg-bg-secondary border border-border rounded-lg text-center"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <p className="text-text/70 mb-2">
-              피드를 작성하려면 로그인이 필요합니다.
-            </p>
-            <Link
-              to="/auth/signin"
-              className="inline-flex items-center space-x-1 text-primary hover:text-primary-hover transition-colors"
-            >
-              <span>로그인하기</span>
-            </Link>
-          </motion.div>
-        )}
+        {/* 피드 작성 폼 */}
+        <CreateFeed onSuccess={handleFeedCreated} />
 
         {/* 로딩 상태 */}
         {isLoading && (
@@ -132,11 +110,7 @@ const FeedDemo = () => {
               <div className="text-center py-8 text-text/60">
                 <MessageCircle className="w-12 h-12 mx-auto mb-4 text-text/40" />
                 <p className="text-lg font-medium mb-2">아직 피드가 없습니다</p>
-                <p className="text-sm">
-                  {isAuthenticated
-                    ? '첫 번째 피드를 작성해보세요!'
-                    : '로그인하고 첫 번째 피드를 작성해보세요!'}
-                </p>
+                <p className="text-sm">첫 번째 피드를 작성해보세요!</p>
               </div>
             ) : (
               feeds.map((feed) => (

@@ -13,6 +13,9 @@ export interface Feed {
     nickname: string;
     profileImage: string | null;
   };
+
+  likeCount?: number; // 좋아요 수 (선택적)
+  isLiked?: boolean; // 현재 사용자가 좋아요했는지 여부 (선택적)
 }
 
 // 피드 목록 조회 응답 타입
@@ -36,4 +39,17 @@ export interface UpdateFeedResponse {
 // 피드 삭제 응답 타입
 export interface DeleteFeedResponse {
   message: string;
+}
+
+// 좋아요 토글 응답 타입
+export interface ToggleLikeResponse {
+  message: string;
+  isLiked: boolean;
+  likeCount: number;
+}
+
+// 좋아요 수 조회 응답 타입
+export interface LikeCountResponse {
+  message: string;
+  likeCount: number;
 }

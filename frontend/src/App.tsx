@@ -93,7 +93,14 @@ function App() {
             {/* 슬라이더 */}
             <Route path="/tech-demo/slider" element={<SliderDemo />} />
             {/* 피드 */}
-            <Route path="/tech-demo/feed" element={<FeedDemo />} />
+            <Route
+              path="/tech-demo/feed"
+              element={
+                <ProtectedRoute>
+                  <FeedDemo />
+                </ProtectedRoute>
+              }
+            />
             {/* 404페이지 */}
             <Route path="*" element={<NotFound />} />
           </Routes>
