@@ -7,6 +7,7 @@ import { User } from './entities/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { Feed } from './entities/feed.entity';
 import { FeedModule } from './feed/feed.module';
+import { FeedLike } from './entities/feed-like.entity';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { FeedModule } from './feed/feed.module';
         username: configService.get('DB_USERNAME'), // 데이터베이스 사용자명
         password: configService.get('DB_PASSWORD'), // 데이터베이스 비밀번호
         database: configService.get('DB_DATABASE'), // 데이터베이스 이름
-        entities: [User, Feed], // 사용할 엔티티들 (데이터베이스 테이블과 매핑)
+        entities: [User, Feed, FeedLike], // 사용할 엔티티들 (데이터베이스 테이블과 매핑)
         synchronize: configService.get('NODE_ENV') === 'development', // 개발환경에서만 테이블 자동 생성/수정
         logging: configService.get('NODE_ENV') === 'development', // 개발환경에서만 SQL 쿼리 로그 출력
       }),
