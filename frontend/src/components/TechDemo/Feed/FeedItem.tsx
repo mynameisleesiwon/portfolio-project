@@ -222,22 +222,29 @@ const FeedItem = ({
 
               {/* 좋아요 버튼 */}
               <div className="flex items-center gap-2">
-                <button
+                <motion.button
                   onClick={handleToggleLike}
                   disabled={isLiking}
-                  className={`flex items-center gap-1 px-3 py-1.5 rounded-lg transition-all duration-200 ${
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 font-medium ${
                     isLiked
-                      ? 'bg-red-500/10 text-red-500 hover:bg-red-500/20'
-                      : 'bg-bg-secondary text-text/60 hover:bg-bg-secondary/80'
-                  } hover:scale-105`}
+                      ? 'bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20'
+                      : 'bg-bg-secondary text-text/60 border border-border hover:bg-bg-secondary/80 hover:border-primary/30'
+                  } disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
-                  <Heart
-                    className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`}
-                  />
-                  <span className="text-sm font-medium">
-                    {likeCount > 0 ? likeCount : ''}
-                  </span>
-                </button>
+                  <motion.div
+                    animate={{
+                      scale: isLiked ? [1, 1.2, 1] : 1,
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Heart
+                      className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`}
+                    />
+                  </motion.div>
+                  <span className="text-sm">{likeCount}</span>
+                </motion.button>
               </div>
             </div>
           )}
