@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
 import { useComments } from '../../../hooks/Feed/useComments';
 import LoadingSpinner from '../../../common/components/LoadingSpinner';

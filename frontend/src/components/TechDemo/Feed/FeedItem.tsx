@@ -33,7 +33,6 @@ const FeedItem = ({
 
   const [likeCount, setLikeCount] = useState(feed.likeCount || 0);
   const [isLiked, setIsLiked] = useState(feed.isLiked || false);
-  const [commentCount, setCommentCount] = useState(feed.commentCount || 0); // 댓글 수 상태 추가
 
   const { user } = useAuth();
   const { updateFeed, isLoading: isUpdating } = useUpdateFeed();
@@ -267,7 +266,7 @@ const FeedItem = ({
                   }`}
                 >
                   <MessageCircle className="w-4 h-4" />
-                  <span className="text-sm">{commentCount}</span>
+                  <span className="text-sm">{feed.commentCount || 0}</span>
                 </motion.button>
               </div>
               {/* 댓글 목록 */}
