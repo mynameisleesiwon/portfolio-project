@@ -16,6 +16,7 @@ export interface Feed {
 
   likeCount?: number; // 좋아요 수 (선택적)
   isLiked?: boolean; // 현재 사용자가 좋아요했는지 여부 (선택적)
+  commentCount?: number; // 댓글 수 추가 (선택적)
 }
 
 // 피드 목록 조회 응답 타입

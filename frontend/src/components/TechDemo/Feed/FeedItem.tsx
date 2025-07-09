@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Edit, Trash2, MoreVertical, Heart } from 'lucide-react';
+import { Edit, Trash2, MoreVertical, Heart, MessageCircle } from 'lucide-react';
 import { useAuth } from '../../../hooks/Auth/useAuth';
 import { useUpdateFeed } from '../../../hooks/Feed/useUpdateFeed';
 import { useDeleteFeed } from '../../../hooks/Feed/useDeleteFeed';
@@ -8,6 +8,7 @@ import { useConfirm } from '../../../hooks/useConfirm';
 import ConfirmModal from '../../../common/components/ConfirmModal';
 import type { Feed } from '../../../types';
 import { useToggleLike } from '../../../hooks/Feed/useToggleLike';
+import CommentList from './CommentList';
 
 interface FeedItemProps {
   feed: Feed;
@@ -28,9 +29,11 @@ const FeedItem = ({
 }: FeedItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [content, setContent] = useState(feed.content);
+  const [showComments, setShowComments] = useState(false); // 댓글 표시 여부
 
   const [likeCount, setLikeCount] = useState(feed.likeCount || 0);
   const [isLiked, setIsLiked] = useState(feed.isLiked || false);
+  const [commentCount, setCommentCount] = useState(feed.commentCount || 0); // 댓글 수 상태 추가
 
   const { user } = useAuth();
   const { updateFeed, isLoading: isUpdating } = useUpdateFeed();
@@ -91,6 +94,12 @@ const FeedItem = ({
       setIsLiked(result.isLiked);
       setLikeCount(result.likeCount);
     }
+  };
+
+  // 댓글 수 업데이트 핸들러
+  const handleCommentUpdate = () => {
+    // 댓글 수를 1씩 증가/감소시키는 대신, 부모 컴포넌트에서 전체 피드 목록을 새로고침하도록 함
+    onUpdate();
   };
 
   return (
@@ -220,8 +229,8 @@ const FeedItem = ({
                 {feed.content}
               </p>
 
-              {/* 좋아요 버튼 */}
               <div className="flex items-center gap-2">
+                {/* 좋아요 버튼 */}
                 <motion.button
                   onClick={handleToggleLike}
                   disabled={isLiking}
@@ -245,7 +254,29 @@ const FeedItem = ({
                   </motion.div>
                   <span className="text-sm">{likeCount}</span>
                 </motion.button>
+
+                {/* 댓글 버튼 */}
+                <motion.button
+                  onClick={() => setShowComments(!showComments)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 font-medium ${
+                    showComments
+                      ? 'bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20'
+                      : 'bg-bg-secondary text-text/60 border border-border hover:bg-bg-secondary/80 hover:border-primary/30'
+                  }`}
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  <span className="text-sm">{commentCount}</span>
+                </motion.button>
               </div>
+              {/* 댓글 목록 */}
+              {showComments && (
+                <CommentList
+                  feedId={feed.id}
+                  onCommentUpdate={handleCommentUpdate}
+                />
+              )}
             </div>
           )}
         </div>
