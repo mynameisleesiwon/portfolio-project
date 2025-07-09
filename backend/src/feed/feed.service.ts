@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Feed } from '../entities/feed.entity';
 import { FeedLike } from 'src/entities/feed-like.entity';
+import { CommentService } from 'src/comment/comment.service';
 
 @Injectable()
 export class FeedService {
@@ -15,6 +16,7 @@ export class FeedService {
     private feedRepository: Repository<Feed>, // Feed 엔티티의 Repository 주입
     @InjectRepository(FeedLike)
     private feedLikeRepository: Repository<FeedLike>, // FeedLike 엔티티의 Repository 주입
+    private commentService: CommentService, // CommentService 주입
   ) {}
 
   // 모든 피드 목록 조회 (사용자 정보 및 좋아요 정보 포함)
@@ -31,11 +33,13 @@ export class FeedService {
       feeds.map(async (feed) => {
         const likeCount = await this.getLikeCount(feed.id);
         const isLiked = await this.isLikedByUser(feed.id, userId);
+        const commentCount = await this.commentService.getCommentCount(feed.id); // 댓글 수 추가
 
         return {
           ...feed,
           likeCount,
           isLiked,
+          commentCount, // 댓글 수 추가
         };
       }),
     );

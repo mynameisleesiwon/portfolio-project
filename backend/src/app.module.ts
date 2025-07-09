@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { Feed } from './entities/feed.entity';
 import { FeedModule } from './feed/feed.module';
 import { FeedLike } from './entities/feed-like.entity';
+import { Comment } from './entities/comment.entity';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -26,7 +28,7 @@ import { FeedLike } from './entities/feed-like.entity';
         username: configService.get('DB_USERNAME'), // 데이터베이스 사용자명
         password: configService.get('DB_PASSWORD'), // 데이터베이스 비밀번호
         database: configService.get('DB_DATABASE'), // 데이터베이스 이름
-        entities: [User, Feed, FeedLike], // 사용할 엔티티들 (데이터베이스 테이블과 매핑)
+        entities: [User, Feed, FeedLike, Comment], // 사용할 엔티티들 (데이터베이스 테이블과 매핑)
         synchronize: configService.get('NODE_ENV') === 'development', // 개발환경에서만 테이블 자동 생성/수정
         logging: configService.get('NODE_ENV') === 'development', // 개발환경에서만 SQL 쿼리 로그 출력
       }),
@@ -34,6 +36,7 @@ import { FeedLike } from './entities/feed-like.entity';
     }),
     AuthModule, // Auth 모듈 추가
     FeedModule, // Feed 모듈 추가
+    CommentModule, // Comment 모듈 추가
   ],
   controllers: [AppController], // HTTP 요청을 처리하는 컨트롤러
   providers: [AppService], // 비즈니스 로직을 담당하는 서비스

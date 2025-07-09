@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { FeedLike } from './feed-like.entity';
+import { Comment } from './comment.entity';
 
 // Feed 엔티티 - 소셜 피드 게시글을 담는 데이터베이스 테이블
 @Entity('feeds') // 데이터베이스 테이블명을 'feeds'로 지정
@@ -49,7 +50,12 @@ export class Feed {
   @OneToMany(() => FeedLike, (feedLike) => feedLike.feed, { cascade: true })
   feedLikes: FeedLike[]; // 이 피드에 좋아요를 누른 사용자들의 목록
 
+  // 댓글 목록 - Comment 엔티티와의 1:N 관계 설정
+  @OneToMany(() => Comment, (comment) => comment.feed, { cascade: true })
+  comments: Comment[]; // 이 피드에 달린 댓글들의 목록
+
   // 가상 속성 (데이터베이스에 저장되지 않음, API 응답용)
   likeCount?: number; // 좋아요 수
   isLiked?: boolean; // 현재 사용자가 좋아요했는지 여부
+  commentCount?: number; // 댓글 수
 }
