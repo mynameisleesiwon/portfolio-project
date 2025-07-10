@@ -9,6 +9,7 @@ import ConfirmModal from '../../../common/components/ConfirmModal';
 import type { Feed } from '../../../types';
 import { useToggleLike } from '../../../hooks/Feed/useToggleLike';
 import CommentList from './CommentList';
+import { koreanTimeAgo } from '../../../utils/date-utils';
 
 interface FeedItemProps {
   feed: Feed;
@@ -126,13 +127,7 @@ const FeedItem = ({
                 {feed.user.nickname}
               </span>
               <span className="text-xs text-text/60">
-                {new Date(feed.createdAt).toLocaleDateString('ko-KR', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
+                {koreanTimeAgo(feed.createdAt)}
               </span>
             </div>
 

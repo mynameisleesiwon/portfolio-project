@@ -7,6 +7,7 @@ import { useDeleteComment } from '../../../hooks/Feed/useDeleteComment';
 import { useConfirm } from '../../../hooks/useConfirm';
 import ConfirmModal from '../../../common/components/ConfirmModal';
 import type { Comment } from '../../../types';
+import { koreanTimeAgo } from '../../../utils/date-utils';
 
 interface CommentItemProps {
   comment: Comment;
@@ -102,13 +103,7 @@ const CommentItem = ({
               {comment.user.nickname}
             </span>
             <span className="text-xs text-text/60">
-              {new Date(comment.createdAt).toLocaleDateString('ko-KR', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
+              {koreanTimeAgo(comment.createdAt)}
             </span>
           </div>
 
