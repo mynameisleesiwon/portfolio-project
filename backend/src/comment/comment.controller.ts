@@ -21,8 +21,11 @@ export class CommentController {
   // 특정 피드의 댓글 목록 조회 API (인증 필요)
   @Get('feed/:feedId') // GET /comments/feed/:feedId
   @UseGuards(JwtAuthGuard) // JWT 토큰 검증
-  async getCommentsByFeedId(@Param('feedId') feedId: string) {
-    const comments = await this.commentService.findByFeedId(feedId);
+  async getCommentsByFeedId(@Param('feedId') feedId: string, @Req() req) {
+    const comments = await this.commentService.findByFeedId(
+      feedId,
+      req.user.id,
+    );
 
     return {
       message: '댓글 목록 조회가 성공적으로 완료되었습니다.',
@@ -103,6 +106,33 @@ export class CommentController {
     return {
       message: '댓글 수 조회가 완료되었습니다.',
       commentCount,
+    };
+  }
+
+  // 댓글 좋아요 토글 API (인증 필요)
+  @Post(':id/like') // POST /comments/:id/like
+  @UseGuards(JwtAuthGuard) // JWT 토큰 검증
+  async toggleLike(@Param('id') commentId: string, @Req() req) {
+    const result = await this.commentService.toggleLike(commentId, req.user.id);
+
+    return {
+      message: result.isLiked
+        ? '댓글에 좋아요를 눌렀습니다.'
+        : '댓글 좋아요를 취소했습니다.',
+      isLiked: result.isLiked,
+      likeCount: result.likeCount,
+    };
+  }
+
+  // 댓글 좋아요 수 조회 API (인증 필요)
+  @Get(':id/like-count') // GET /comments/:id/like-count
+  @UseGuards(JwtAuthGuard) // JWT 토큰 검증
+  async getLikeCount(@Param('id') commentId: string) {
+    const likeCount = await this.commentService.getLikeCount(commentId);
+
+    return {
+      message: '좋아요 수 조회가 완료되었습니다.',
+      likeCount,
     };
   }
 }

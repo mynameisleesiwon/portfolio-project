@@ -6,9 +6,11 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { User } from './user.entity';
 import { Feed } from './feed.entity';
+import { CommentLike } from './comment-like.entity';
 
 // Comment 엔티티 - 피드 댓글을 담는 데이터베이스 테이블
 @Entity('comments') // 데이터베이스 테이블명을 'comments'로 지정
@@ -52,4 +54,14 @@ export class Comment {
     type: 'timestamp', // 타임스탬프 타입
   })
   updatedAt: Date;
+
+  // 좋아요 목록 - CommentLike 엔티티와의 1:N 관계 설정
+  @OneToMany(() => CommentLike, (commentLike) => commentLike.comment, {
+    cascade: true,
+  })
+  commentLikes: CommentLike[]; // 이 댓글에 좋아요를 누른 사용자들의 목록
+
+  // 가상 속성 (데이터베이스에 저장되지 않음, API 응답용)
+  likeCount?: number; // 좋아요 수
+  isLiked?: boolean; // 현재 사용자가 좋아요했는지 여부
 }
