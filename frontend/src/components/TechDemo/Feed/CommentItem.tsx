@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Edit, Trash2, MoreVertical } from 'lucide-react';
+import { Edit, Trash2, MoreVertical, Heart } from 'lucide-react';
 import { useAuth } from '../../../hooks/Auth/useAuth';
 import { useUpdateComment } from '../../../hooks/Feed/useUpdateComment';
 import { useDeleteComment } from '../../../hooks/Feed/useDeleteComment';
@@ -8,6 +8,7 @@ import { useConfirm } from '../../../hooks/useConfirm';
 import ConfirmModal from '../../../common/components/ConfirmModal';
 import type { Comment } from '../../../types';
 import { koreanTimeAgo } from '../../../utils/date-utils';
+import { useToggleCommentLike } from '../../../hooks/Feed/useToggleCommentLike';
 
 interface CommentItemProps {
   comment: Comment;
@@ -29,9 +30,13 @@ const CommentItem = ({
   const [isEditing, setIsEditing] = useState(false);
   const [content, setContent] = useState(comment.content);
 
+  const [likeCount, setLikeCount] = useState(comment.likeCount || 0);
+  const [isLiked, setIsLiked] = useState(comment.isLiked || false);
+
   const { user } = useAuth();
   const { updateComment, isLoading: isUpdating } = useUpdateComment();
   const { deleteComment, isLoading: isDeleting } = useDeleteComment();
+  const { toggleCommentLike, isLoading: isLiking } = useToggleCommentLike();
 
   const {
     isOpen: isConfirmOpen,
@@ -77,6 +82,15 @@ const CommentItem = ({
     setContent(comment.content);
     setIsEditing(false);
     onMenuClose();
+  };
+
+  // 댓글 좋아요 토글 핸들러
+  const handleToggleLike = async () => {
+    const result = await toggleCommentLike(comment.id);
+    if (result) {
+      setIsLiked(result.isLiked);
+      setLikeCount(result.likeCount);
+    }
   };
 
   return (
@@ -190,7 +204,34 @@ const CommentItem = ({
             </div>
           </div>
         ) : (
-          <p className="text-text text-sm leading-relaxed">{comment.content}</p>
+          <div>
+            <p className="text-text text-sm leading-relaxed">
+              {comment.content}
+            </p>
+
+            {/* 댓글 좋아요 버튼 */}
+            <motion.button
+              onClick={handleToggleLike}
+              disabled={isLiking}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`flex items-center gap-1 px-2 py-1 rounded text-xs transition-all duration-200 font-medium ${
+                isLiked
+                  ? 'bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20'
+                  : 'bg-bg-secondary text-text/60 border border-border hover:bg-bg-secondary/80 hover:border-primary/30'
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
+            >
+              <motion.div
+                animate={{
+                  scale: isLiked ? [1, 1.2, 1] : 1,
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                <Heart className={`w-3 h-3 ${isLiked ? 'fill-current' : ''}`} />
+              </motion.div>
+              <span className="text-xs">{likeCount}</span>
+            </motion.button>
+          </div>
         )}
       </div>
 

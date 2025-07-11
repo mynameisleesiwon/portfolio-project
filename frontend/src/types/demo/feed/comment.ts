@@ -14,6 +14,8 @@ export interface Comment {
     nickname: string;
     profileImage: string | null;
   };
+  likeCount?: number; // 좋아요 수 (선택적)
+  isLiked?: boolean; // 현재 사용자가 좋아요했는지 여부 (선택적)
 }
 
 // 댓글 목록 조회 응답 타입
@@ -43,4 +45,17 @@ export interface DeleteCommentResponse {
 export interface CommentCountResponse {
   message: string;
   commentCount: number;
+}
+
+// 댓글 좋아요 토글 응답 타입
+export interface ToggleCommentLikeResponse {
+  message: string;
+  isLiked: boolean;
+  likeCount: number;
+}
+
+// 댓글 좋아요 수 조회 응답 타입
+export interface CommentLikeCountResponse {
+  message: string;
+  likeCount: number;
 }

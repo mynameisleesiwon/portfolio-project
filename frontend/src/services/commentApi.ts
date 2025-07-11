@@ -5,6 +5,8 @@ import type {
   CommentsResponse,
   CommentCountResponse,
   UpdateCommentResponse,
+  ToggleCommentLikeResponse,
+  CommentLikeCountResponse,
 } from '../types';
 import { createApiClient } from '../utils/apiClient';
 
@@ -100,6 +102,46 @@ export const commentApiService = {
         throw new Error(
           error.response?.data?.message ||
             '댓글 수 조회 중 오류가 발생했습니다.'
+        );
+      }
+      throw error;
+    }
+  },
+
+  // 댓글 좋아요 토글 API
+  async toggleCommentLike(
+    commentId: string
+  ): Promise<ToggleCommentLikeResponse> {
+    try {
+      const response = await privateCommentApi.post(
+        `/comments/${commentId}/like`
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(
+          error.response?.data?.message ||
+            '댓글 좋아요 처리 중 오류가 발생했습니다.'
+        );
+      }
+      throw error;
+    }
+  },
+
+  // 댓글 좋아요 수 조회 API
+  async getCommentLikeCount(
+    commentId: string
+  ): Promise<CommentLikeCountResponse> {
+    try {
+      const response = await privateCommentApi.get(
+        `/comments/${commentId}/like-count`
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(
+          error.response?.data?.message ||
+            '댓글 좋아요 수 조회 중 오류가 발생했습니다.'
         );
       }
       throw error;
