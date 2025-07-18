@@ -7,15 +7,20 @@ export const createApiClient = (
   options: {
     requireAuth?: boolean;
     timeout?: number;
+    withCredentials?: boolean;
   } = {}
 ) => {
-  const { requireAuth = true, timeout = 10000 } = options;
+  const {
+    requireAuth = true,
+    timeout = 10000,
+    withCredentials = true,
+  } = options;
 
   // axios 인스턴스 생성
   const client = axios.create({
     baseURL,
     timeout,
-    withCredentials: true,
+    withCredentials,
     headers: {
       'Content-Type': 'application/json',
     },

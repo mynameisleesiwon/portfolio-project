@@ -6,7 +6,10 @@ const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // axios 인스턴스 생성
-const tmdb_api = createApiClient(API_BASE_URL, { requireAuth: false });
+const tmdb_api = createApiClient(API_BASE_URL, {
+  requireAuth: false,
+  withCredentials: false,
+});
 
 // TMDB API 클래스
 export const sliderApi = {
